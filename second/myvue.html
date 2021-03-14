@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>myvue</title>
+</head>
+<body>
+  <div id="app">
+    <div>{{name}}啊，你真帅</div>
+    <div>年龄：{{person.age}}，性别: {{person.sex}}</div>
+  </div>
+</body>
+
+<script>
+
+function MyVue(options) {
+  this.$options = options
+  let data = this._data = options.data
+  let el = options.el
+
+  for (let key in data) {
+    Object.defineProperty(this, key, {
+      configurable: true,
+      set(val) {
+        this._data[key] = val
+      },
+      get() {
+        return this._data[key]
+      }
+    })
+  }
+
+  observer(data)
+  new Compile(el, this)
+}
+
+function Compile(el, vm) {
+  // 将el挂到实例上，方便调用
+  vm.$el = document.querySelector(el)
+  // 将el范围内内容全部拿到，可以选择用文档碎片的功能
+  let fragment = document.createDocumentFragment()
+}
+
+function observer(data) {
+  if (data === null || typeof data !== 'object') {
+    return
+  }
+
+  new Observer(data)
+}
+
+function Observer(data) {
+  for (let key in data) {
+    let val = data[key]
+    observer(val)
+    Object.defineProperty(data, key, {
+      enumerable: true,
+      configurable: true,
+      get() {
+        return val
+      },
+      set(newVal) {
+        if (newVal = val) {
+          return
+        } 
+
+        val = newVal
+        observer(val)
+      }
+    })
+  }
+}
+
+
+function Dep() {
+  this.subs = []
+}
+
+Dep.prototype = {
+  addSub(sub) {
+    this.subs.push(sub)
+  },
+  notify() {
+    this.sub.forEach(sub => sub.update())
+  }
+}
+
+
+function Wather(fn) {
+  this.fn = fn
+}
+
+Wather.prototype.update = function() {
+  this.fn()
+}
+
+let vm = new MyVue({
+  el: '#app',
+  data: {
+    name: '老王',
+    person: {
+      age: 18,
+      sex: '男'
+    }
+  }
+})
+
+console.log(vm.name)
+
+
+</script>
+</html>

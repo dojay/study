@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数字千分位</title>
+</head>
+<body>
+<script>
+
+let num = 123456789.9876
+
+function splitNum(num) {
+  num = (num + '').split('.')
+  let num1 = num[0]
+  let num2 = num[1]
+
+  num1 = num1.split('')
+  let res = []
+  
+  for (let i=num1.length - 1;i>=0;i--) {
+    if (i % 3 === 0 && i !== 0) {
+      res.push(num1[i], ',')
+    } else {
+      res.push(num1[i])
+    }
+  }
+
+  return res.reverse().join('')+'.'+num2
+}
+
+function regSplit(num) {
+  let reg = /\d{1,3}(?=(\d{3})+$)/g
+
+  return (num+'').replace(reg, '$&,')
+}
+
+console.log('splitNum(num) :>> ', regSplit(num));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>继承</title>
+</head>
+<body>
+<script>
+
+function Super() {
+  this.name = '老王'
+  this.arr = ['aaa']
+}
+
+Super.prototype.sayName = function() {
+  console.log('嘿,' + this.name)
+}
+
+
+function Sub() {
+  // Super.call(this)
+}
+
+Sub.prototype = new Super()
+// Sub.prototype = Object.create(Super.prototype)
+
+
+// console.log(new Super())
+// console.log(Object.create(Super.prototype))
+
+// Object.create是以参数为对象，生成实例对象
+
+
+
+let sub1 = new Sub()
+let sub2 = new Sub()
+
+sub1.arr.push('bbbb')
+// sub.sayName()
+// console.log(sub1.arr, sub2.arr)
+
+
+// 1，7，6，8，2，4，3，5，9，11，10，12
+
+
+let arr = [[1,2],3,[[4,5,[6]]]]
+
+
+Array.prototype._flat = function() {
+  return this.reduce((arr, cur) => {
+    return arr.concat(Array.isArray(cur) ? cur._flat() : cur)
+  }, [])
+}
+
+console.log(arr._flat(), '---result')
+
+
+</script>
+</body>
+</html>

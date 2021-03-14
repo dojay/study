@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+function curring(fn, ...args) {
+  let length = fn.length
+
+  return function(...innerArgs) {
+    let _args = args.concat(innerArgs)
+
+    if (_args.length < length) {
+      return curring(fn, ..._args)
+    } else {
+      return fn(..._args)
+    }
+  }
+}
+
+const fn = function(a, b, c) {
+  return a+b+c
+}
+
+const c = curring(fn)
+
+console.log(c(1)(2)(3));
+
+</script>
+</body>
+</html>

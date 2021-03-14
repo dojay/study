@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>new</title>
+</head>
+<body>
+<script>
+
+// function myNew(fn, ...args) {
+//   let obj = {}
+//   obj.__proto__ = fn.prototype
+//   let result = fn.call(obj, ...args)
+
+//   return result instanceof Object ? result : obj
+// }
+
+
+// function myNew(fn, ...args) {
+//   let obj = Object.create(fn.prototype)
+//   let result = fn.call(obj, ...args)
+
+//   return result instanceof Object ? result : obj
+// }
+
+
+// function myNew(fn, ...args) {
+//   let obj = Object.setPrototypeOf({}, fn.prototype)
+//   let result = fn.call(obj, ...args)
+//   return result instanceof Object ? result : obj
+// }
+
+function Foo(name) {
+  this.name = name
+}
+
+let f = myNew(Foo, '老王')
+
+console.log(f.name)
+
+</script>
+</body>
+</html>

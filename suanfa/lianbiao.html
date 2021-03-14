@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>链表</title>
+</head>
+<body>
+<script>
+
+// function Node(element) {
+//   this.element = element
+//   this.next = null
+// }
+
+// function LList() {
+//   this.head = new Node('head')
+// }
+
+// LList.prototype.find = function(item) {
+//   let currentNode = this.head
+
+//   while(currentNode.element !== item) {
+//     currentNode = currentNode.next
+//   }
+
+//   return currentNode
+// }
+
+// LList.prototype.insert = function(newElement, item) {
+//   const newNode = new Node(newElement)
+//   const current = this.find(item)
+
+//   newNode.next = current.next
+//   current.next = newNode
+// }
+
+// LList.prototype.display = function() {
+//   let currentNode = this.head
+//   const llArr = []
+
+//   while(currentNode !== null) {
+//     llArr.push(currentNode.element)
+//     currentNode = currentNode.next
+//   }
+
+//   return llArr
+// }
+
+// LList.prototype.remove = function(element) {
+//   const previousNode = this.findPrevous(element)
+//   const currentNode = this.find(element)
+
+//   previousNode.next = currentNode.next
+//   currentNode.next = null 
+
+//   // if(previousNode.next !== null) {
+//   //   previousNode.next = previousNode.next.next
+//   // }
+// }
+
+// LList.prototype.findPrevous = function(item) {
+//   let currentNode = this.head
+
+//   while(currentNode !== null && currentNode.next.element !== item) {
+//     currentNode = currentNode.next
+//   }
+
+//   return currentNode
+// }
+
+// const ll = new LList()
+
+// ll.insert('aaa', 'head')
+// ll.insert('bbb', 'aaa')
+// ll.insert('ccc', 'bbb')
+
+// console.log(ll.display());
+
+// ll.remove('bbb')
+
+// console.log(ll.display());
+
+
+
+function Node(element) {
+  this.element = element
+  this.next = null
+}
+
+function LList() {
+  this.head = new Node('head')
+}
+
+LList.prototype.find = function (item) {
+  let current = this.head
+
+  while(current.element !== item) {
+    current = current.next
+  }
+
+  return current
+}
+
+LList.prototype.insert = function(element, item) {
+  const current = this.find(item)
+  const node = new Node(element)
+
+  node.next = current.next
+  current.next = node
+}
+
+LList.prototype.show = function () {
+  let current = this.head
+  const arr = []
+
+  while(current.next !== null) {
+    arr.push(current.next.element)
+    current = current.next
+  }
+
+  return arr
+}
+
+const ll = new LList()
+
+ll.insert('aaa', 'head')
+ll.insert('bbb', 'aaa')
+
+// console.log(ll.show())
+
+
+function add(x) {
+  return function(y) {
+    return x + y
+  }
+}
+
+console.log(add(1))
+
+
+
+let stack = []; // 保存需要 repeat 的字符串
+let times = ''; // 乘以的倍数
+
+for (let i = 0, len = s.length; i < len; i++) {
+    let item = s[i];
+
+    if (/[0-9]/.test(item)) {
+        if (i === 0 || /[0-9]/.test(s[i - 1])) {
+            times += item;
+        } else {
+            times = item
+        }
+    } else if (item === '[') {
+        times && stack.push(Number(times));
+        times = '';
+    } else if (item === ']') {
+        var curr = stack.pop();
+        var temp = '';
+        while (typeof curr !== 'number') {
+            temp = curr + temp;
+            curr = stack.pop();
+        }
+        temp = temp.repeat(curr);
+        stack.push(temp);
+    } else {
+        stack.push(item);
+    }
+}
+return stack.join('');
+
+
+</script>
+</body>
+</html>

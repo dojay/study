@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DFS</title>
+</head>
+<body>
+<script>
+
+const data = [
+  {
+    name: 'a',
+    children: [
+      { name: 'b', children: [{ name: 'e' }] },
+      { name: 'c', children: [{ name: 'f' }] },
+      { name: 'd', children: [{ name: 'g' }] },
+    ]
+  },
+  {
+    name: 'a2',
+    children: [
+      { name: 'b2', children: [{ name: 'e2' }] },
+      { name: 'c2', children: [{ name: 'f2' }] },
+      { name: 'd2', children: [{ name: 'g2' }] },
+    ]
+  }
+]
+
+// function dfs(data, result = []) {
+//   if (data) {
+//     data.forEach(item => {
+//       result.push(item.name)
+//       if (item.children && item.children.length) {
+//         dfs(item.children, result)
+//       }
+//     });
+//   }
+//   return result
+// }
+
+function dfs(data) {
+  const stack = []
+  const result = []
+  
+  data.forEach(item => {
+    stack.push(item)
+
+    while(stack.length) {
+      const item = stack.pop()
+      const children = item.children
+      result.push(item.name)
+
+      if (children && children.length) {
+        for (let i=children.length-1;i>=0;i--) {
+          stack.push(children[i])
+        }
+      }
+    }
+  })
+  
+  console.log(result)
+}
+
+// dfs(data)
+
+function bfs(data) {
+  const stack = []
+  const result = []
+  
+  data.forEach(item => {
+    stack.push(item)
+  })
+
+  while(stack.length) {
+      const item = stack.shift()
+      const children = item.children
+      result.push(item.name)
+
+      if (children && children.length) {
+        for (let i=0;i<children.length;i++) {
+          stack.push(children[i])
+        }
+      }
+    }
+
+  console.log(result)
+}
+
+bfs(data)
+
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>数组拍平</title>
+</head>
+<body>
+<script>
+
+
+Array.prototype.flatten = function() {
+  let result = []
+
+  function flat(arr) {
+    for(let i=0;i<arr.length;i++) {
+      if (Array.isArray(arr[i])) {
+        flat(arr[i])
+      } else {
+        result.push(arr[i])
+      }
+    }
+  }
+  flat(this)
+  return result
+}
+
+Array.prototype.flat = function() {
+  function f(arr) {
+    return arr.reduce((res, cur) => {
+      return res.concat(Array.isArray(cur) ? f(cur) : cur)
+    }, [])
+  }
+  return f(this)
+}
+
+
+let arr = [[1,2,3],4, [5], [[6]]]
+
+console.log(arr.flat())
+
+</script>
+</body>
+</html>

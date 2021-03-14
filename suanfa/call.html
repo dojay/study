@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>call apply</title>
+</head>
+<body>
+<script>
+
+  Function.prototype.myCall = function(ctx, ...args) {
+    ctx = ctx || window
+    ctx.fn = this
+    const result = ctx.fn(...args)
+    delete ctx.fn
+    return result
+  }
+
+  Function.prototype.myApply = function(ctx, args) {
+    ctx = ctx || window
+
+    ctx.fn = this
+    const result = ctx.fn(...args)
+    delete ctx.fn
+    return result
+  }
+
+  const obj = {
+    name: '老王'
+  }
+
+  function say(age, sex) {
+    // console.log(this.name, '年龄是:' + age, '性别:' + sex)
+    return '1111'
+  }
+
+  Function.prototype.myBind = function(ctx, ...args) {
+    const self = this
+    const fBound = function(...innerArgs) {
+      return self.apply(this instanceof fBound ? this : ctx, args.concat(innerArgs))
+    }
+    return fBound
+  }
+
+  const obj = {
+    name: '老王'
+  }
+
+  function say(age, sex) {
+    // console.log(this.name, '年龄是:' + age, '性别:' + sex)
+    return '1111'
+  }
+
+  const sayName = say.myBind(obj, '18')
+  new sayName()
+
+  // console.log(say.myCall(obj, '18', '男'))
+  // console.log(say.myApply(obj, ['18', '男']))
+
+  
+
+  function Foo(name) {
+    console.log(this.__proto__.constructor)
+    this.name = name
+  }
+
+  // new Foo('老王')
+
+
+  function _new(fn) {
+    let obj = {}
+    const args = [].slice.call(arguments, 1)
+    obj.__proto__ = fn.prototype
+    fn.apply(obj, args)
+    return obj
+  }
+
+  // const f = _new(Foo, '老王')
+  // console.log(f.name)
+
+</script>
+</body>
+</html>

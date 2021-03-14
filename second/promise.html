@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise</title>
+</head>
+<body>
+<script>
+
+class MyPromise {
+  constructor(executor) {
+    this.state = 'pending'
+    this.value = undefined
+    this.reason = undefined
+    this.resolveQueue = []
+    this.rejectQueue = []
+
+    let _resolve = (value) => {
+      if (this.state === 'pending') {
+        this.state = 'fulfilled'
+        this.value = value
+        while(this.resolveQueue.length) {
+          let callback = this.resolveQueue.shift()
+          callback(this.value)
+        }
+      }
+    }
+
+    let _reject = (reason) => {
+      if (this.state === 'pending') {
+        this.state = 'rejcted'
+        this.reason = reason
+        while(this.rejectQueue.length) {
+          let callback = this.rejectQueue.shift()
+          callback(reason)
+        }
+      }
+    }
+
+    executor(_resolve, _reject)
+  }
+
+  then(onFulfilled, onRejected) {
+    if (this.state === 'fulfilled') {
+      onFulfilled(this.value)
+    }
+
+    if (this.state === 'rejected') {
+      onRejected(this.reason)
+    }
+
+    if (this.state === 'pending') {
+      this.resolveQueue.push(() => {
+        onFulfilled(this.value)
+      })
+
+      this.rejectQueue.push(() => {
+        onRejected(this.reason)
+      })
+    }
+  }
+
+  static all(promises) {
+    let index = 0
+    let result = []
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((item, idx) => {
+        item.then(res => {
+          index++
+          result[idx] = res
+          if (index === promises.length) {
+            resolve(result)
+          }
+        }, reject)
+      });
+    })
+  }
+}
+
+
+
+let p = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('老王')
+  }, 2000)
+})
+
+p.then(res => console.log(res))
+
+</script>
+</body>
+</html>

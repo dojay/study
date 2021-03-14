@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>响应式原理</title>
+</head>
+<body>
+</body>
+<script>
+
+function observe(data, cb) {
+  Object.keys(data).forEach((key) => {
+    defineReactive(data, key, data[key], cb)
+  })
+}
+
+function defineReactive(data, key, val, cb) {
+  Object.defineProperty(data, key, {
+    enumerable: true,
+    configurable: true,
+    get: function() {
+      return val
+    },
+    set: function(newVal) {
+      val = newVal
+      cb()
+    }
+  })
+}
+
+function Vue(options) {
+  this._data = options.data
+  Object.keys(this._data).forEach(key => {
+    Object.defineProperty(this, key, {
+      configurable: true,
+      get: function() {
+        return this._data[key]
+      },
+      set: function(newVal) {
+        this._data[key] = newVal
+      }
+    })
+  })
+  observe(this._data, options.render)
+}
+
+const app = new Vue({
+  data: {
+    name: '老王'
+  },
+  render() {
+    console.log('我被设置了')
+  }
+})
+
+app.name = '老张'
+// console.log(app);
+// app._data.name = '老张'
+
+
+</script>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>控制请求数量</title>
+</head>
+<body>
+<script>
+
+// 模拟一个fetch请求
+function fetch(url) {
+  let random = Math.floor(Math.random() * 2000)
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(`返回____${url}`)
+      resolve(url)
+    }, random)
+  })
+}
+
+// 并发请求数量
+// function ctrlUrls(urls, max, callback) {
+//   let count = 0
+//   let result = []
+
+//   function doFetch(url) {
+//     console.log('开始请求 :>> ', url);
+//     ++count
+
+//     fetch(url).then(res => {
+//       result.push(res)
+//       if (count < urls.length) {
+//         doFetch(urls[count])
+//       } else if (result.length === urls.length) {
+//         callback()
+//       }
+//     })
+
+//     if (count < max) {
+//       doFetch(urls[count])
+//     }
+//   }
+
+
+//   doFetch(urls[count])
+// }
+
+
+// 串行请求
+function series(urls, callback) {
+  let count = 0
+  let result = []
+
+  function doFetch(url) {
+    fetch(url).then(res => {
+      ++count
+      if (result.length === urls.length) {
+        callback()
+      } else if (count < urls.length){
+        doFetch(urls[count])
+      }
+    })
+  }
+
+  doFetch(urls[count])
+}
+
+
+
+// ctrlUrls([1,2,3,4,5,6,7,8,9], 4, ()=> {console.log('done')})
+series([1,2,3,4,5,6,7,8,9], ()=> {console.log('done')})
+
+</script>
+</body>
+</html>

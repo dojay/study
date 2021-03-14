@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+
+function Person(name){
+  this.name = name;
+  this.age = 25;
+  this.say = function(){
+    console.log(this.name + ":" + this.age);
+  }
+}
+
+function _new(fn, ...args) {
+  const obj = Object.create(fn.prototype)
+
+  
+}
+
+const p = _new(Person, '老王')
+
+// console.log(p.name)
+
+var a = 20;
+var obj = {
+  a: 10,
+  c: this.a + 20,
+  fn: function () {
+    return this.a;
+  }
+}
+
+// console.log(obj.c);
+// console.log(obj.fn());
+
+const foo = {
+  name: '老王'
+}
+
+function say(age) {
+  console.log(this.name, age)
+}
+
+Function.prototype.myCall = function(context, ...args) {
+  let ctx = context || window
+  ctx.fn = this
+  const result = ctx.fn(...args)
+
+  delete ctx.fn
+
+  return result
+}
+
+Function.prototype.myApply = function(context, args) {
+  let ctx = context || window
+
+  ctx.fn = this
+  const result = ctx.fn(...args)
+  return result
+}
+
+// Function.prototype.myBind = function(context, args) {
+//   let ctx = context || window
+
+//   ctx.fn = this
+
+//   return function() {
+
+//   }
+//   const result = ctx.fn(...args)
+//   return result
+// }
+
+// say.myBind(foo)
+
+
+// 原型链继承
+
+// function Super() {
+//   this.superValue = 'super'
+// }
+
+// Super.prototype.getSuperValue = function() {
+//   return this.superValue
+// }
+
+// function Sub() {
+//   this.subValue = 'sub'
+// }
+
+// Sub.prototype = new Super()
+
+// Sub.prototype.getSubValue = function() {
+//   return this.subValue
+// }
+
+// const sub = new Sub()
+// console.log(sub.superValue);  // super
+// console.log(sub.subValue);  // sub
+// console.log(sub.getSuperValue());  // super
+// console.log(sub.getSubValue()); // sub
+
+// 构造函数继承
+// function Super(name) {
+//   this.name = name
+// }
+
+// function Sub() {
+//   Super.call(this, '老王')
+// }
+
+// const sub = new Sub()
+// console.log(sub.name); // 老王
+
+// 组合继承
+function Super(name) {
+  this.name = name
+}
+
+Super.prototype.sayName = function() {
+  return this.name
+}
+
+function Sub(name) {
+  // 继承属性
+  Super.call(this, name)
+}
+
+Sub.prototype = new Super()
+Sub.prototype.constructor = Sub
+
+Sub.prototype.sayHello = function() {
+  console.log('hello world')
+}
+
+const sub = new Sub('老王')
+
+// console.log(sub.sayName())
+
+
+const executor = (a, b) => {
+  a(111)
+  b(222)
+}
+
+executor()
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>防抖节流</title>
+  <style>
+    #box{
+      width: 300px;
+      height: 200px;
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+
+<div id="box"></div>
+
+<script>
+
+// 防抖
+function debounce(fn, delay) {
+  let timer = null
+
+  return function(...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(() => {
+      fn()
+    }, delay)
+  }
+}
+
+// 节流
+function throttle(fn, delay) {
+  let timer = null
+
+  return function() {
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null
+        fn()
+      }, 1000)
+    }
+  }
+}
+
+let box = document.getElementById('box')
+box.addEventListener('mousemove', throttle(() => console.log('我停了'), 2000))
+
+
+
+</script>
+</body>
+</html>

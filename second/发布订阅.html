@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布订阅</title>
+</head>
+<body>
+<script>
+
+function Public() {
+  this.subs = {}
+}
+
+Public.prototype.on = function(name, callback) {
+  if (!this.subs[name]) {
+    this.subs[name] = []
+    this.subs[name].push(callback)
+  } else {
+    this.subs[name].push(callback)
+  }
+}
+
+Public.prototype.emit = function(name, data) {
+  if(this.subs[name]) {
+    this.subs[name].forEach(fn => {
+      fn(data)
+    })
+  }
+}
+
+
+let p = new Public()
+
+p.on('say', function(data) {
+  console.log(data)
+})
+p.on('eat', function(data) {
+  console.log('吃' + data + '真他妈的香')
+})
+
+p.emit('say', '老王')
+p.emit('eat', '屎粑粑')
+
+
+</script>
+</body>
+</html>

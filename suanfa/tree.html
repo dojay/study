@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>树</title>
+</head>
+<body>
+<script>
+
+function Node(val, left = null, right = null) {
+  this.val = val
+  this.left = left
+  this.right = right
+}
+
+const tree = new Node(
+  5,
+  new Node(
+    4, 
+    new Node(
+      11,
+      new Node(7),
+      new Node(2)
+    )
+  ),
+  new Node(
+    8,
+    new Node(13),
+    new Node(
+      4,
+      new Node(5),
+      new Node(1)
+    )
+  )
+)
+
+// console.log(tree);
+
+var pathSum = function(root, sum) {
+    const result = []
+
+    const loop = (root, road) => {
+        if (!root) return
+        road = [...road, root.val]
+
+        if (!root.left && !root.right) {
+            result.push(roadSum)
+        } else {
+          if (root.left) {
+            loop(root.left, roadSum)
+          }
+
+          if (root.right) {
+            loop(root.right, roadSum)
+          }
+        }
+    }
+
+    loop(root, [])
+
+    return result.filter(item => {
+      const s = item.reduce((prev, total) => {
+        return total + prev
+      }, 0)
+
+      return s == sum
+    })
+};
+
+console.log(pathSum(tree, 22))
+
+
+</script>
+</body>
+</html>

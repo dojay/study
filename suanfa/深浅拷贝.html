@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+  function shallowCopy(obj) {
+    if (!obj || typeof obj !== 'object') return
+
+    const newObj = obj instanceof Array ? [] : {}
+
+    for (let key in obj) {
+      newObj[key] = obj[key]
+    }
+    return newObj
+  }
+
+  // const arr = [1,2,3,4]
+  // const obj = {
+  //   a: 1,
+  //   b: 2
+  // }
+  // const newArr = shallowCopy(arr)
+  // arr[0] = 5
+  // console.log(arr)
+  // console.log(newArr);
+  
+  // const newObj = shallowCopy(obj)
+  // obj.a = 11
+  // console.log(obj);
+  // console.log(newObj);
+  
+
+  function deepCopy(obj) {
+    if (!obj || typeof obj !== 'object') return
+    const newObj = obj instanceof Array ? [] : {}
+    for (let key in obj) {
+      newObj[key] = typeof obj[key] === 'object' ? deepCopy(obj[key]) : obj[key]
+    }
+    return newObj
+  }
+
+  const arr = [1, [2,3], [4]]
+  const newArr = deepCopy(arr)
+
+  arr[1][0] = 5
+  console.log(arr);
+  console.log(newArr);
+
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>二叉树</title>
+</head>
+<body>
+<script>
+
+//     3
+//   9   20
+// 28   15 7
+
+function Node(val, left=null, right=null) {
+  this.left = left
+  this.right = right
+  this.val = val
+}
+
+const tree = new Node(
+  5,
+  new Node(
+    4, 
+    new Node(
+      11,
+      new Node(7),
+      new Node(2)
+    )
+  ),
+  new Node(
+    8,
+    new Node(13),
+    new Node(
+      4,
+      null,
+      new Node(1)
+    )
+  )
+)
+
+// console.log(tree);
+
+function hasPathSum(root, sumNum) {
+  let paths = []
+
+  let loop = (root, path) => {
+    if (!root) return
+
+    let pathSum = [...path, root.val]
+
+    if (!root.left && !root.right) {
+      paths.push(pathSum)
+    } else {
+      if (root.left) {
+        loop(root.left, pathSum)
+      }
+      if (root.right) {
+        loop(root.right, pathSum)
+      }
+    }
+  }
+
+  loop(root, [])
+  console.log(paths)
+  let res = paths.filter(item => {
+    console.log(item.reduce((cur, sum) => {
+      return cur + sum
+    }))
+    return sumNum === item.reduce((cur, sum) => {
+      return cur + sum
+    })
+  })
+
+  return res.length !== 0
+}
+
+console.log(hasPathSum(tree, 22))
+
+
+// BFS
+function bfs(root) {
+  let res = []
+  let queue = []
+
+  queue.push(root)
+
+  while(queue.length) {
+    let len = queue.length
+    for(let i=0;i<len;i++) {
+      let node = queue.shift()
+      if (node) {
+        res.push(node.val)
+        queue.push(node.left)
+        queue.push(node.right)
+      }
+    }
+  }
+
+  return res
+}
+
+
+// console.log(bfs(tree))
+
+function dfs(root) {
+  let res = []
+  let stack = []
+
+  stack.push(root)
+
+  while(stack.length) {
+    let len = stack.length
+
+    for(let i=0;i<len;i++) {
+      let node = stack.pop()
+
+      if (node) {
+        res.push(node.val)
+        stack.push(node.right)
+        stack.push(node.left)
+      }
+    }
+  }
+
+  console.log(res)
+}
+
+// dfs(tree)
+var levelOrderBottom = function(root) {
+  if (!root) return []
+    let res = []
+    let queue = []
+
+    queue.push(root)
+
+    while(queue.length) {
+        let len = queue.length
+        let tmp = []
+        for (let i=0;i<len;i++) {
+            let node = queue.shift()
+            tmp.push(node.val)
+            if (node.left) queue.push(node.left)
+            if (node.right) queue.push(node.right)
+        }
+
+        res.unshift(tmp)
+    }
+
+    return res
+};
+
+// console.log(levelOrderBottom(tree))
+
+
+</script>
+</body>
+</html>
