@@ -31,13 +31,24 @@
 //   return result instanceof Object ? result : obj
 // }
 
+
+/*******************再来一遍**********************/
+
+
+
+/*******************测试用例**********************/
+
 function Foo(name) {
   this.name = name
+  return {
+    name: '老张'
+  }
 }
 
-let f = myNew(Foo, '老王')
-
+// let f = new Foo('老王')
+let f = _new(Foo,  '老王')
 console.log(f.name)
+
 
 </script>
 </body>

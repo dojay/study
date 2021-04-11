@@ -1,8 +1,15 @@
-const enum Directions {
-  Up,
-  Down,
-  Left,
-  Right
+interface Person {
+  readonly name: string,
+  readonly other: Object
 }
 
-let directions = [Directions.Up, Directions.Down, Directions.Left, Directions.Right];
+let j: Person = {
+  name: '老王',
+  other: {
+    age: 18
+  }
+}
+
+j.other.age = 'shun'
+
+
