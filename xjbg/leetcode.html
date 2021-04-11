@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+var merge = function(intervals) {
+    const len = intervals.length
+    intervals = intervals.sort((a, b) => a[0] - b[0])
+    let result = [intervals[0]]
+    let idx = 0
+    for(let i=1;i<len;i++) {
+        if (intervals[i][0] > result[idx][1]) {
+            result.push(intervals[i])
+            ++idx
+        } else {
+            result[idx][1] = Math.max(result[idx][1], intervals[i][1])
+        }
+    }
+    console.log(result);
+    return result
+};
+
+// merge([[1,3],[2,6],[8,10],[15,18]])
+
+const Node = function(val, left=null, right=null) {
+  this.val = val
+  this.left = left
+  this.right = right
+}
+
+// const tree = new Node(5, 
+//   new Node(4,
+//     new Node(11,
+//       new Node(7),
+//       new Node(2)
+//     )
+//   ),
+//   new Node(8,
+//     new Node(13),
+//     new Node(4,
+//       new Node(5),
+//       new Node(1)
+//     )
+//   )
+// )
+
+
+var pathSum = function(root, sum) {
+    const result = []
+
+    const loop = (root, road) => {
+        if (!root) return
+        road = [...road, root.val]
+
+        if (!root.left && !root.right) {
+            result.push(road)
+        } else {
+          if (root.left) {
+            loop(root.left, road)
+          }
+
+          if (root.right) {
+            loop(root.right, road)
+          }
+        }
+    }
+
+    loop(root, [])
+    console.log(result);
+    return result
+};
+
+// pathSum(tree)
+
+function getDepth(root) {
+  if (!root) {
+    return 0
+  }
+
+  const queue = []
+  let deep = 0
+  root && queue.push(root)
+
+  while(queue.length) {
+    const len = queue.length
+
+    for (let i=0;i<len;i++) {
+      const node = queue.pop()
+
+      node.left && queue.unshift(node.left)
+      node.right && queue.unshift(node.right)
+    }
+
+    deep++
+  }
+}
+
+var levelOrder = function(root) {
+  if (!root) return []
+
+  const result = [root.val]
+  const queue = []
+
+  queue.push(root)
+
+  while(queue.length) {
+    const len = queue.length
+
+    for (let i=0;i<len;i++) {
+      const node = queue.pop()
+
+      node.left && queue.unshift(node.left)
+      node.right && queue.unshift(node.right)
+    }
+
+    const arr = []
+    queue.forEach(item => {
+      arr.push(item.val)
+    })
+    if (queue.length) {
+      if (result.length % 2 !== 0) {
+        result.push(arr)
+      } else {
+        result.push(arr.reverse())
+      }
+    }
+  }
+
+  console.log(result)
+};
+
+// const tree = new Node(3, 
+//   new Node(9),
+//   new Node(20,
+//     new Node(15),
+//     new Node(7)
+//   )
+// )
+
+// levelOrder(tree)
+
+// const tree = new Node(1, 
+//   new Node(2,
+//     new Node(4),
+//     new Node(5)
+//   ),
+//   new Node(3)
+// )
+
+var diameterOfBinaryTree = function(root) {
+  const left = [root.val]
+  const right = [root.val]
+
+  const loop = (root) => {
+    if (root) {
+      if (root.left) {
+        left.push(root.left.val)
+        loop(root.left)
+      }
+
+      if (root.right) {
+        right.push(root.right.val)
+        loop(root.right)
+      }
+    }
+  }
+
+  loop(root)
+  console.log(left, right)
+};
+
+
+// diameterOfBinaryTree(tree)
+
+var merge = function(nums1, m, nums2, n) {
+  let len1 = m - 1
+  let len2 = n - 1
+  let len = m + n - 1
+
+  while(len1 >= 0 && len2 >= 0) {
+    nums1[len--] = nums1[len1] > nums2[len2] ? nums1[len1--] : nums2[len2--]
+  }
+
+  if (len1 < 0) {
+    nums1.splice(0, len2+1, ...nums2.splice(0, len2+1))
+  }
+};
+
+const nums1 = [3,5,6]
+const nums2 = [1,2,2,4,7,8]
+// merge(nums1, 3, nums2, 6)
+
+// console.log(nums1);
+
+// const tree = new Node(5, 
+//   new Node(4,
+//     new Node(11,
+//       new Node(7),
+//       new Node(2)
+//     )
+//   ),
+//   new Node(8,
+//     new Node(13),
+//     new Node(4,
+//       null,
+//       new Node(1)
+//     )
+//   )
+// )
+
+const tree = new Node(-2, 
+  null,
+  new Node(-3)
+)
+
+var hasPathSum = function(root, sum) {
+  const arr = []
+  let flag = false
+  const loop = (root, arr) => {
+    if (root) {
+      arr = arr.concat(root.val)
+      if (!root.left && !root.left) {
+        const all = arr.reduce((item, total) => {
+          return total + item
+        })
+        if (all === sum) {
+          flag = true
+        }
+      }
+
+      loop(root.left, arr)
+      loop(root.right, arr)
+    }
+  }
+
+  loop(root, arr)
+
+  return flag
+};
+
+// console.log(hasPathSum(tree, 22));
+
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+ var findRepeatNumber = function(nums) {
+  let result = 0
+  for (let i=0;i<nums.length;i++) {
+    const num = nums[i]
+    const tmpNums = nums.slice(i+1)
+
+    if (tmpNums.indexOf(num) > -1) {
+      result = num
+      break
+    }
+  }
+
+  return result
+};
+
+// console.log(findRepeatNumber([0, 1, 2, 3, 4, 11, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]));
+
+
+var addStrings = function(num1, num2) {
+  let len = num1.length > num2.length ? num1.length : num2.length
+  num1 = num1.split('')
+  num2 = num2.split('')
+  let add = 0
+  let result = []
+  for (let i=0;i<len;i++) {
+    let n1 = num1.pop() || 0
+    let n2 = num2.pop() || 0
+    let sum = Number(n1) + Number(n2)
+    if (add) {
+      sum = sum + add
+      
+    }
+    add = sum >= 10 ? 1 : 0
+    sum = sum >= 10 ? Number(sum.toString().substring(1)) : sum
+    result.push(sum)
+  }
+  result = result.reverse().join('')
+  if (add) {
+    result = add + result
+  }
+  return result
+};
+
+addStrings("123456789", "987654321")
+
+</script>
+</body>
+</html>

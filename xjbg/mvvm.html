@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+function MVVM(options = {}) {
+  this.$options = options
+  let _data = this._data = this.$options.data
+  let el = this.$options.el
+
+  observer(_data)
+}
+
+function observer(data) {
+  if (!data || typeof data !== 'object') {
+    return
+  }
+
+  return new Observer(data)
+}
+
+function Observer(data) {
+  for (let key in data) {
+    let val = data[key]
+    observer(val)
+    Object.defineProperty(data, key, {
+      enumerable: true,
+      configurable: true,
+      get() {
+        return val
+      },
+      set(newVal) {
+        if (newVal === val) return
+
+        val = newVal
+        observer(val)
+      }
+    })
+  }
+}
+
+function Dep() {
+  this.subs = []
+}
+
+Dep.prototype = {
+  addSub(handler) {
+    this.subs.push(handler)
+  },
+  notify() {
+    this.subs.forEach(sub => sub.update())
+  }
+}
+
+function Wacther(fn) {
+  this.fn = fn
+
+  Dep.target = this
+}
+
+Wacther.prototype.update = () => {
+  this.fn()
+}
+
+const app = new MVVM({
+  el: '#app',
+  data: {
+    name: 'test'
+  }
+})
+
+</script>
+</body>
+</html>

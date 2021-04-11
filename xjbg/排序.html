@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+const arr = [5,1,8,7,4,2,3,6]
+
+// function bubbleSort(arr) {
+//   for (let i=0;i<arr.length;i++) {
+//     for (let j=0;j<arr.length - i -1;j++) {
+//       if (arr[j] > arr[j+1]) {
+//         let tmp = arr[j+1]
+//         arr[j+1] = arr[j]
+//         arr[j] = tmp
+//       }
+//     }
+//   }
+//   return arr
+// }
+
+
+// function quickSort(arr) {
+//   if (arr.length === 0) return arr
+//   const left = []
+//   const right = []
+
+//   const middle = Math.floor(arr.length / 2)
+//   const point = arr.splice(middle, 1)
+
+//   for (let i=0;i<arr.length;i++) {
+//     if (arr[i] < point) {
+//       left.push(arr[i])
+//     } else {
+//       right.push(arr[i])
+//     }
+//   }
+
+//   return quickSort(left).concat(point, quickSort(right))
+// }
+
+function quickSort(arr) {
+  if (arr.length === 0) {
+    return arr
+  } 
+  let left = []
+  let right = []
+  let middle = Math.floor(arr.length / 2)
+  let point = arr.splice(middle, 1)[0]
+
+  for (let i=0;i<arr.length;i++) {
+    if (arr[i] < point) {
+      left.push(arr[i])
+    } else {
+      right.push(arr[i])
+    }
+  }
+
+  return quickSort(left).concat(point, quickSort(right))
+}
+
+
+
+function insertSort(arr) {
+  for (let i=1;i<arr.length;i++) {
+    let tmp = arr[i]
+
+    for (let j=i;j>0;j--) {
+      if (tmp < arr[j-1]) {
+        arr[j] = arr[j-1]
+        arr[j-1] = tmp
+      }
+    }
+  }
+
+  return arr
+}
+
+// console.log(insertSort(arr));
+
+
+
+</script>
+</body>
+</html>

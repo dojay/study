@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{margin: 0;padding: 0;}
+    #app{
+      height: 100%;
+    }
+    #box{
+      overflow-y: auto;
+    }
+    ul{
+      list-style: none;
+    }
+    ul li{
+      height: 50px;
+      width: 100%;
+      border-bottom: 1px solid #999;
+      padding: 10px;
+      border: 2px solid;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body >
+  <div id="app">
+    <div id="box" @scroll="doScroll" ref="box">
+      <ul id="ul">
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li @click="fuck" id="li">内容1111</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+        <li>内容</li>
+      </ul>
+    </div>
+  </div>
+  
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {}
+    },
+    mounted() {
+      window.addEventListener('scroll', () => {
+        let top = document.body.scrollTop || window.pageYOffset
+        console.log(top);
+        if (top > 700) {
+            this.scrollTag = true;
+        } else {
+            this.scrollTag = false
+        }
+
+    })
+    },
+    methods: {
+      fuck() {
+        console.log('fuck', this.$refs.box.scrollTop)
+      },
+      doScroll() {
+        console.log(1111);
+      }
+    }
+  })
+</script>
+</html>

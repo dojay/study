@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+
+function Person(name){
+  this.name = name;
+  this.age = 25;
+  this.say = function(){
+    console.log(this.name + ":" + this.age);
+  }
+}
+
+function _new(fn, ...args) {
+  const obj = Object.create(fn.prototype)
+
+  
+}
+
+const p = _new(Person, '老王')
+
+// console.log(p.name)
+
+var a = 20;
+var obj = {
+  a: 10,
+  c: this.a + 20,
+  fn: function () {
+    return this.a;
+  }
+}
+
+// console.log(obj.c);
+// console.log(obj.fn());
+
+const foo = {
+  name: '老王'
+}
+
+function say(age) {
+  console.log(this.name, age)
+}
+
+Function.prototype.myCall = function(context, ...args) {
+  let ctx = context || window
+  ctx.fn = this
+  const result = ctx.fn(...args)
+
+  delete ctx.fn
+
+  return result
+}
+
+Function.prototype.myApply = function(context, args) {
+  let ctx = context || window
+
+  ctx.fn = this
+  const result = ctx.fn(...args)
+  return result
+}
+
+// Function.prototype.myBind = function(context, args) {
+//   let ctx = context || window
+
+//   ctx.fn = this
+
+//   return function() {
+
+//   }
+//   const result = ctx.fn(...args)
+//   return result
+// }
+
+// say.myBind(foo)
+
+
+// 原型链继承
+
+// function Super() {
+//   this.superValue = 'super'
+// }
+
+// Super.prototype.getSuperValue = function() {
+//   return this.superValue
+// }
+
+// function Sub() {
+//   this.subValue = 'sub'
+// }
+
+// Sub.prototype = new Super()
+
+// Sub.prototype.getSubValue = function() {
+//   return this.subValue
+// }
+
+// const sub = new Sub()
+// console.log(sub.superValue);  // super
+// console.log(sub.subValue);  // sub
+// console.log(sub.getSuperValue());  // super
+// console.log(sub.getSubValue()); // sub
+
+// 构造函数继承
+// function Super(name) {
+//   this.name = name
+// }
+
+// function Sub() {
+//   Super.call(this, '老王')
+// }
+
+// const sub = new Sub()
+// console.log(sub.name); // 老王
+
+// 组合继承
+function Super(name) {
+  this.name = name
+}
+
+Super.prototype.sayName = function() {
+  return this.name
+}
+
+function Sub(name) {
+  // 继承属性
+  Super.call(this, name)
+}
+
+Sub.prototype = new Super()
+Sub.prototype.constructor = Sub
+
+Sub.prototype.sayHello = function() {
+  console.log('hello world')
+}
+
+const sub = new Sub('老王')
+
+// console.log(sub.sayName())
+
+
+const executor = (a, b) => {
+  a(111)
+  b(222)
+}
+
+// executor()
+
+
+var funcs = [];
+
+var _loop = function _loop(i) {
+    funcs[i] = function () {
+        // console.log(i);
+    };
+};
+
+for (var i = 0; i < 10; i++) {
+    _loop(i);
+}
+funcs[0]();
+
+
+const aa = '    a  b c    de '
+
+// aaa = aa.replace(/\s+/g, ' ')
+// console.log(aaa.replace(/^\s*|\s$/g, ''));
+
+function sum(...args) {
+  const fn = function(...innerArgs) {
+    return sum(...args.concat(innerArgs))
+  }
+
+  fn.toString = function() {
+    return args.reduce((a, b) => a+b)
+  }
+
+  return fn
+}
+
+// console.log(sum(1)(2)(3).toString());
+
+
+// var lengthOfLongestSubstring = function(s) {
+//     let map = new Map(), max = 0
+//     for(let i = 0, j = 0; j < s.length; j++) {
+//         if(map.has(s[j])) {
+//             i = Math.max(map.get(s[j]) + 1, i)
+//         }
+//         max = Math.max(max, j - i + 1)
+//         map.set(s[j], j)
+//     }
+//     return max
+// };
+
+// // console.log(lengthOfLongestSubstring('dvdfda'))
+
+
+var lastStoneWeight = function(stones) {
+    let result = 0
+    const loop = (stones) => {
+        if (stones.length === 1) {
+          result = stones[0]
+          return
+        }
+        if (stones.length === 0) {
+          result = 0
+          return
+        }
+        stones = stones.sort((a, b) => {return b - a})
+        let x = stones[0]
+        let y = stones[1]
+
+        if (x === y) {
+            stones = stones.splice(2)
+        } else {
+            const newStone = x - y
+            stones = stones.splice(2)
+            stones.push(newStone)
+        }
+        loop(stones)
+    }
+    loop(stones)
+    return result
+};
+
+// console.log(lastStoneWeight([2,7,4,1,8,1]));
+
+
+ /**
+ * @param {string} s
+ * @return {string}
+ */
+// 扩展中心
+var longestPalindrome = function(s) {
+   if(!s || s.length < 2) return s;
+   let start = 0; 
+   let end = 0;
+   for(let i = 0; i < s.length; i++) {
+       let len1 = expandCenter(s,i,i); // 中心点位奇数 比如: aabaa
+       let len2 = expandCenter(s,i,i+1); // 中心在偶数 比如: aabbcc
+       let len = Math.max(len1,len2);
+       if(len > end - start) {
+           start = i - Math.floor((len-1)/2);
+           end = i + Math.floor(len/2);
+       }
+   }
+   return s.substring(start,end+1);
+};
+const expandCenter = function(s,l,r) {
+    while(l>=0 && r < s.length && s[l] === s[r]) {
+        l--;
+        r++;
+    }
+    return r - l -1;
+}
+
+var reverseList = function(head) {
+    function findPrev(item) {
+        let curNode = head
+        while(curNode.next !== null && curNode.next.val === item) {
+            curNode = curNode.next
+        }
+
+        return curNode
+    }
+
+    function findLast(head) {
+        let last = head
+        while(last.next !== null) {
+            last = last.next
+        }
+
+        return last
+    }
+
+    let curNode = head
+    let newList = new ListNode('head')
+    let val = findLast(head).val
+
+    while(curNode.next !== null) {
+        newList.next = new ListNode(val)
+        curNode = curNode.next
+        val = findPrev(val).val
+    }
+
+    return newList
+};
+
+// function ListNode(val) {
+//   this.val = val;
+//   this.next = null;
+// }
+
+// const head = new ListNode('head')
+// head.next = new ListNode(1)
+// head.next.next = new ListNode(2)
+// head.next.next.next = new ListNode(3)
+// head.next.next.next.next = new ListNode(4)
+// head.next.next.next.next.next = new ListNode(5)
+
+// console.log(head);
+
+// console.log(reverseList(head));
+
+
+/**
+ * @param {number} capacity
+ */
+ var LRUCache = function(capacity) {
+    this.lruMap = {}
+    this.keys = []
+    this.capacity = capacity
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+    const index = this.keys.indexOf(key)
+    if (index > -1) {
+        this.keys.splice(index, 1)
+        this.keys.push(key)
+        return this.lruMap[key]
+    }
+    return -1
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+    // 判断是否超了
+    if(this.keys.length === this.capacity) { // 相等，则证明当前put要超了
+        const removeKey = this.keys[0]
+        this.keys.splice(0, 1)
+        delete this.lruMap[removeKey]
+    }
+
+    // 判断key是否存在缓存中
+    const index = this.keys.indexOf(key)
+    
+    if (index > -1) { // 存在
+        this.keys.splice(index, 1)   
+    }
+
+    this.lruMap[key] = value
+
+    // 将最新的添加到keys中
+    this.keys.push(key)
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */
+
+const cache = new LRUCache(2)
+
+// console.log(cache.get(2))
+// cache.put(2, 6);
+// console.log(cache.get(1))
+// cache.put(1, 5);
+// cache.put(1, 2);
+// console.log(cache);
+
+// cache.put(3, 3);    // 该操作会使得关键字 2 作废
+// cache.get(2);       // 返回 -1 (未找到/)
+// cache.put(4, 4);    // 该操作会使得关键字 1 作废
+// cache.get(1);       // 返回 -1 (未找到)
+// cache.get(3);       // 返回  3
+// cache.get(4);       // 返回  4
+
+
+var maxProfit = function(prices) {
+  if (prices.length < 2) return 0
+    
+    let buy = prices[0]
+    let sale = prices[1]
+    let max = 0
+
+    for (let i=1;i<prices.length-1;i++) {
+        buy = Math.min(buy, prices[i])
+        sale = prices[i+1]
+        max = Math.max(max,(sale - buy))
+    }
+
+    return max
+};
+
+
+// console.log(maxProfit([7,1,6,4,3,2]));
+
+function _new1(fn) {
+  const obj = {}
+  obj.__proto__ = fn.prototype // 为了访问fn中的原型属性和方法，例如fn.prototype.sayName = function() {}
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+function _new2(fn) {
+  const obj = Object.setPrototypeOf({}, fn.prototype)
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+function _new3(fn) {
+  const obj = Object.create(fn.prototype)
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+function Faa() {
+  this.a = 1
+}
+
+Faa.prototype.sayName = function() {
+  console.log('老王真帅')
+}
+
+const faa = new Faa()
+// faa.sayName()
+
+function Fbb() {
+  
+}
+
+const fbb = Object.create(faa)
+
+// Object.setPrototypeOf(fbb, faa)
+
+// fbb.sayName()
+
+
+var compareVersion = function(version1, version2) {
+    version1 = version1.split('.')
+    version2 = version2.split('.')
+
+    let len = version1.length > version2.length ? version1.length : version2.length
+
+    for (let i=0;i<len;i++) {
+        if (i<version1.length) {
+          
+        }
+        if (Number(version1[i]) > Number(version2[i])) {
+            return 1
+        } else if (Number(version1[i]) < Number(version2[i])) {
+            return -1
+        }
+    }
+    return 0
+};
+
+
+// console.log(compareVersion('1', '1.1'));
+
+
+var rob = function(nums) {
+    if (nums.length === 0) return 0
+    if (nums <= 2) return Math.max(...nums)
+
+    const dp = []
+    dp[0] = nums[0]
+    dp[1] = nums[1]
+
+    for (let i=2;i<nums.length;i++) {
+        dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i])
+    }
+
+    return dp[nums.length - 1]
+};
+
+// console.log(rob([2,1]));
+
+
+var lengthOfLongestSubstring = function(s) {
+    let tmp = ""
+    let max = 0
+    let result = ''
+
+    const len = s.length
+    for(let i = 0;i<len;i++) {
+        const index = tmp.indexOf(s[i])
+        if (index !== -1) {
+            tmp = tmp.substring(index+1)
+        }
+        tmp = tmp + s[i]
+        // max = Math.max(max, tmp.length)
+        result = tmp.length > result.length ? tmp : result
+    }
+
+    return result
+};
+
+// console.log(lengthOfLongestSubstring('abcabcbb'));
+
+
+// const reverseList = (head) => {
+//   let cur = head
+//   let prev = null
+
+//   while(cur) {
+//     let tmp = cur.next
+
+//     cur.next = prev
+
+//     prev = cur
+//     cur = tmp
+//   }
+
+//   head = prev
+// }
+
+
+// let max = nums[0]
+// let len
+
+
+function Foo() {
+  this.a = 1
+  return {
+    a: 2,
+    b: 3
+  }
+}
+
+Foo.prototype.a = 4
+Foo.prototype.b = 5
+Foo.prototype.c = 6
+
+const f = new Foo()
+
+// console.log(f.a);
+// console.log(f.b);
+// console.log(f.c);
+
+
+function addStrings(num1, num2) {
+  let len1 = num1.length
+  let len2 = num2.length
+  let len = len1 > len2 ? len1 : len2
+  num1 = num1.split('').reverse()
+  num2 = num2.split('').reverse()
+  let res = []
+  let add = 0
+
+  for(let i=0;i<len;i++) {
+    let n1 = num1[i] ? +num1[i] : 0
+    let n2 = num2[i] ? +num2[i] : 0
+    let sum = n1 + n2
+
+    sum = add ? sum + add : sum
+    add = sum >= 10 ? 1 : 0
+    res.push(sum % 10)
+  }
+
+  return res.reverse().join('')
+}
+
+// console.log(addStrings('123456789123456789', '1'))
+
+
+var twoSum = function(nums, target) {
+  let res = []
+  for (let i=0;i<nums.length;i++) {
+      for (let j=i+1;j<nums.length;j++) {
+          if (nums[i] + nums[j] == target) {
+            res.push([nums[i], nums[j]])
+          }
+      }
+  }
+  return res
+};
+
+function _twoSum(nums, target) {
+  let map = new Map()
+  let res = []
+  for (let i=0;i<nums.length;i++) {
+    map.set(nums[i], i)
+  }
+
+  for (let i=0;i<nums.length;i++) {
+    let c = target - nums[i]
+
+    if (map.has(c) && map.get(c) > i) {
+      res.push([nums[i], c])
+    }
+  }
+
+  return res
+}
+
+
+// console.log(_twoSum([1, 6, 7, 10, 12, 13, 14, 21, 22], 28))
+
+
+
+function age(birth) {
+  let nowYear = new Date().getFullYear()
+  birth = new Date(birth)
+  console.log(nowYear, birth.getFullYear())
+  let year = birth.getFullYear()
+
+  return nowYear - year
+}
+
+// console.log(age('1991-04-23'))
+
+
+// 假设本地机器无法做加减乘除法，需要通过远程请求让服务端来实现。
+// 以加法为例，现有远程API的模拟实现
+let addRemote = async (a, b) => new Promise(resolve => {
+  setTimeout(() => resolve(a + b), 1000)
+})
+// 请实现本地的add方法，调用addRemote，能最优的实现输入数字的加法。
+async function add(...inputs) {
+  // 你的实现
+  
+  async function splitArgs(...args) {
+    if (inputs.length > 0) {
+      let sum = await addRemote(...args)
+      return await splitArgs(sum, ...inputs.splice(0, 1))
+    } else {
+      return await addRemote(...args)
+    }
+  }
+
+  return await splitArgs(...inputs.splice(0, 2))
+}
+
+
+// add(1, 2).then(result => {
+//   console.log(result) // 3
+// })
+
+// add(1,2,3).then(result => {
+//   console.log(result) // 6
+// })
+
+// add(1,2,3,4).then(result => {
+//   console.log(result) // 10
+// })
+
+// add(1,2,3,4,5).then(result => {
+//   console.log(result) // 15
+// })
+
+/**
+ * 已知如下数组：
+  var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+  编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组
+*/
+// var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+// Array.prototype._flat = function() {
+//   return this.reduce((res, cur) => {
+//     return res.concat(Array.isArray(cur) ? cur._flat() : cur)
+//   },[])
+// }
+
+// console.log(arr._flat())
+
+// 生成随机数
+
+// function getRandom(len, min, max) {
+//   let res = []
+//   for (let i=0;i<len;i++) {
+//     res.push(Math.floor(Math.random() * (max - min)) + 1)
+//   }
+//   return res
+// }
+
+// let arr = getRandom(10, 0, 100)
+// arr = arr.sort((a, b) => a - b)
+// arr = [...new Set(arr)]
+
+// let map = new Map()
+// arr.forEach(item => {
+//   let key = Math.floor(item / 10)
+//   let val = map.get(key)
+//   if (val) {
+//     val.push(item)
+//     map.set(key, val)
+//   } else {
+//     map.set(key, [item])
+//   }
+// })
+
+
+// let res = []
+
+// for (let [key, value] of map) {
+//   console.log(key)
+//   res.push(value)
+// }
+
+// console.log(res)
+
+
+// let str = 'AbC'
+
+// let newStr = str.split('').map(item => {
+//   if (item.toUpperCase() != item) { // 说明是小写字母
+//     return item.toUpperCase()
+//   } else {
+//     return item.toLowerCase()
+//   }
+// })
+
+// console.log(newStr)
+
+
+var arr = [1,2,3,4,5,6,7]
+
+
+
+Array.prototype._splice = function(start=0, length=0, arr=[]) {
+  // 首先返回的是一个数组
+  let len = this.length
+  let newArr = []
+  let resArr = []
+  for (let i=0;i<len;i++) {
+    if (i >= start && i < start + length) {
+      resArr.push(this[i])
+    } else {
+      if (arr.length && i == start + length) {
+        newArr = newArr.concat(arr)
+      }
+      newArr.push(this[i])
+    }
+  }
+  newArr.forEach((item, index) => {
+    this[index] = item
+  })
+  this.length = newArr.length
+  return resArr
+}
+
+let a1 = arr._splice(2, 2, [8])
+// console.log(a1, arr) // [1,2,4,5,6,7] 
+
+
+/**
+ * 数组交集
+*/
+
+function getNums(...args) {
+  let min = args[0]
+  let res = []
+
+  for (let i=0;i<args.length;i++) {
+    if (min.length > args[i].length) {
+      min = args[i]
+    }
+  }
+
+  for (let i=0;i<min.length;i++) {
+    let flag = true
+    for (let j=0;j<args.length;j++) {
+      if (!args[j].includes(min[i])) {
+        flag = false
+        break
+      }
+    }
+
+    if (flag) {
+      res.push(min[i])
+    }
+  }
+  console.log(res)
+}
+
+function intersection(){
+	let min_arr=arguments[0],intersect=[];
+	for (let i=0;i<arguments.length;i++) {
+		if(min_arr.length > arguments[i].length){ min_arr = arguments[i];}
+	}
+	for(let i=0;i<min_arr.length;i++){
+		let flag = true;
+		for (let j=0;j<arguments.length;j++) {
+			if(!arguments[j].includes(min_arr[i])){
+				flag = false;break;
+			}
+		}
+		if(flag){ 
+			if(!intersect.includes(min_arr[i])){ 
+				intersect.push(min_arr[i]) 
+			}
+		}
+	}
+	console.log(intersect)
+}
+
+// intersection([1,2,3,4,4,7,8], [3,4,4,5,6,7], [3,4,4,8,9]) // 结果应该是：3，4，4
+
+
+// 1-n中间有多少个1
+
+function getNumCount(num, max) {
+  let count = 0
+
+  for (let i=0;i<=max;i++) {
+    let m = i.toString().match(/[1]+/)
+    if(m && m.length) {
+      count += m[0].length
+    }
+  }
+  console.log(count)
+}
+
+// getNumCount(1, 100) // 1,10-19,21,31,41,51,61,71,81,91,100 共计21个
+
+var entry1 = {
+  'a.b.c.dd': 'abcdd',
+  'a.d.xx': 'adxx',
+  'a.e': 'ae'
+}
+
+function splitEntry(entry) {
+  let res = {}
+
+  let keys = Object.keys(entry)
+  let values = Object.values(entry)
+
+  for (let key of keys) {
+    let value = entry[key]
+    let arr = key.split('.')
+    if (!res[arr[0]]) {
+      res[arr[0]] = {}
+    }
+    let tmp = res[arr[0]]
+    for (let i=1;i<arr.length;i++) {
+      let k = arr[i]
+      if (i == arr.length - 1) {
+        tmp[k] = value
+      } else {
+        if (!tmp[k]) {
+          tmp[k] = {}
+        }
+        tmp = tmp[k]
+      }
+      
+    }
+    
+  }
+  console.log(res)
+}
+// splitEntry(entry1)
+
+var entry = {
+  a: {
+    b: {
+      c: {
+        dd: 'abcdd'
+      }
+    },
+    d: {
+      xx: 'adxx'
+    },
+    e: 'ae'
+  }
+}
+
+function joinEntry(obj, parentKey="", res={}) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      let keyName = `${parentKey}${key}`
+
+      if (typeof obj[key] == 'object') {
+        joinEntry(obj[key], keyName+'.', res)
+      } else {
+        res[keyName] = obj[key]
+      }
+    }
+  }
+
+  return res
+}
+
+
+// console.log(joinEntry(entry))
+
+
+//输入 '1, 2, 3, 5, 7, 8, 10' 输出 '1~3, 5, 7~8, 10'
+
+function t(data) {
+  let res = []
+  let str = ''
+  data = data.split(',')
+  let min = data[0]
+
+  for (let i=0;i<data.length;i++) {
+    if (data[i+1] != Number(data[i]) + 1) {
+      if (min != data[i]) {
+        str = `${min}-${data[i]}`
+      } else {
+        str = min
+      }
+      
+      min = data[i+1]
+      res.push(str)
+    }
+  } 
+
+  console.log(res)
+}
+
+// t('1,2,3,5,7,8,10')
+
+
+var searchInsert = function(nums, target) {
+  for (let i=0;i<nums.length;i++) {
+      if (target === nums[i]) {
+        return i
+      }
+  }
+
+  for (let i=0;i<nums.length;i++) {
+      if (target < nums[i]) {
+          return i == 0 ? 0 : i - 1
+      } else {
+          return i+1
+      }
+  }
+  
+};
+
+
+var findMedianSortedArrays = function(nums1, nums2) {
+    let nums = [...nums1, ...nums2]
+    nums = nums.sort((a,b) => a - b)
+
+    if (nums.length % 2 == 0) {
+        return (nums[nums.length / 2 - 1] + nums[nums.length / 2] / 2)
+    } else {
+        return (nums[(Math.floor(nums.length / 2))])
+    }
+
+    console.log(nums)
+};
+
+// findMedianSortedArrays([1,2],[3,4])
+
+
+var maxArea = function(height) {
+    // 暴力解法
+    let area = 0
+    let max = 0
+    for (let i=0;i<height.length;i++) {
+        for (let j=i;j<height.length;j++) {
+            area = (height[j] > height[i] ? height[i] : height[j]) * (j - i)
+            max = Math.max(area, max)
+        }
+    }
+
+    console.log(max)
+};
+
+
+// maxArea([1,8,6,2,5,4,8,3,7])
+
+
+var letterCombinations = function(digits) {
+    let d = {
+        2: ['a', 'b', 'c'],
+        3: ['d', 'e', 'f'],
+        4: ['g', 'h', 'i'],
+        5: ['j', 'k', 'l'],
+        6: ['m', 'n', 'o'],
+        7: ['p', 'q', 'r', 's'],
+        8: ['t', 'u', 'v'],
+        9: ['w', 'x', 'y', 'z']
+    }
+
+    let res = []
+    let dfs = (curStr, i) => {
+        if (i > digits.length) {
+            res.push(curStr)
+            return
+        }
+
+        let strs = d[digits[i]]
+        for (let j=0;j<strs.length;j++) {
+            dfs(curStr + strs[i], i+1)
+        }
+    }
+
+    dfs('', 0)
+};
+
+// letterCombinations('23')
+
+var permute = function(nums) {
+    let res = []
+    let len = nums.length
+    let dfs = (r) => {
+        if (r.length == nums.length) {
+            res.push(r.slice())
+            return
+        }
+
+        for (let i=0;i<nums.length;i++) {
+            if (r.indexOf(nums[i]) == -1) {
+                r.push(nums[i])
+                dfs(r)
+                r.pop()
+            }
+        }
+    }
+
+    dfs([])
+
+    return res
+};
+
+// permute([1,2,3])
+
+
+// 正则 'get-element-by-id' 转驼峰
+
+function transfer(str) {
+  let reg = /\-\w{1}/g
+
+  let s = str.replace(reg, m => {
+    return m[1].toUpperCase()
+  })
+
+  console.log(s, str)
+}
+
+transfer('get-element-by-id')
+
+
+</script>
+</body>
+</html> 

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+class MyPromise{
+
+  static resolve(value) {
+    if (value instanceof MyPromise) return value
+
+    return new MyPromise(resolve => resolve(value))
+  }
+
+  static reject(reason) {
+    return new MyPromise((resolve, reject) => reject(reason))
+  }
+
+  static all(promises) {
+    const length = promises.length
+    let index = 1
+    const result = []
+
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((item, idx) => {
+        MyPromise.resolve(item).then(
+          value => {
+            index++
+            result[idx] = value
+
+            if (index === length) {
+              resolve(result)
+            }
+          },
+          err => {
+            reject(err)
+          }
+        )
+      })
+    })
+  }
+
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach(item => {
+        MyPromise.resolve(item).then(
+          value => resolve(value),
+          err => reject(err)
+        )
+      })
+    })
+  }
+  
+  constructor(executor) {
+    this.state = 'pedding'
+    this._resolveQueue = []
+    this._rejecteQueue = []
+
+    const _resolve = (val) => {
+      const run = () => {
+        if (this.state !== 'pedding') return
+        this.state = 'fulfilled'
+        while(this._resolveQueue.length) {
+          const callback = this._resolveQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+
+    const _reject = (val) => {
+      const run = () => {
+        if (this.state !== 'pedding') return
+        this.state = 'rejected'
+        while(this._rejecteQueue.length) {
+          const callback = this._rejecteQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+
+    executor(_resolve, _reject)
+  }
+
+  then(resolveFn, rejectFn) {
+    typeof resolveFn !== 'function' ? resolveFn = (value) => value : null
+    typeof rejectFn !== 'function' ? rejectFn = (reason) => {
+      throw new Error(reason instanceof Error ? reason.message : reason)
+    } : null
+    return new MyPromise((resolve, reject) => {
+      const fulfilledFn = (value) => {
+        try {
+          let x = resolveFn(value)
+          x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+        } catch(e) {
+          reject(e)
+        }
+      }
+      this._resolveQueue.push(fulfilledFn)
+
+      const rejectedFn = (value) => {
+        try {
+          let x = rejectFn(value)
+
+          x instanceof MyPromise ? x.then(resolve, reject) : reject(x)
+        } catch(e) {
+          reject(E)
+        }
+      }
+      this._rejecteQueue.push(rejectedFn)
+    })
+  }
+
+  catch(rejectFn) {
+    return this.then(null, rejectFn)
+  }
+
+  finally(callback) {
+    this.then(
+      value => MyPromise.resolve(callback()).then(() => value),
+      reason => MyPromise.resolve(callback()).then(() => { throw reason})
+    )
+  }
+}
+
+/****************************************************************************************/
+
+
+class Promise {
+  finally(callback) {
+    this.then(
+      value => Promise.resolve(callback()).then(() => value),
+      reason => Promise.resolve(callback()).then(() => {throw reason})
+    )
+  }
+}
+
+
+// =====================================测试用例===================================================
+
+// const p = new MyPromise((resolve, reject) => {
+//   resolve(111)
+// })
+
+// p.then((res) => {
+//   console.log(res)
+// })
+
+const p1 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('result')
+  }, 2000)
+})
+
+p1.then(res => console.log(res), err => console.log(err))
+
+</script>
+</body>
+</html>

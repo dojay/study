@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+// 先模拟一个fetch
+
+function fetch(url) {
+  // 模拟不同的请求返回的时间
+  return new Promise((resolve, reject) => {
+    const time = parseInt(Math.random() * 5000);
+    console.log(`开始执行${url}请求`)
+    setTimeout(() => {
+      console.log(`${url},执行完毕`)
+      resolve(url)
+    }, time)
+  })
+}
+
+function fetch(url) {
+  return new Promise((resolve, reject) => {
+    const random = Math.random() * 4000
+
+    setTimeout(() => {
+      resolve(url)
+    }, random);
+  })
+}
+
+function limitFetch(urls, max, callback) {
+  let result = []
+  let fetchCount = 0
+
+  function getFetch(url) {
+    ++fetchCount
+
+    fetch(url).then(res => {
+      result.push(res)
+
+      if (fetchCount < urls.length) {
+        getFetch(urls[fetchCount])
+      } else if (result.length === urls.length) {
+        callback(result)
+      }
+    })
+
+    if (fetchCount < max) {
+      getFetch(urls[fetchCount])
+    }
+  }
+
+  getFetch(urls[fetchCount])
+}
+
+function limitFetch(urls, max, callback) {
+  let result = []
+  let fetchCount = 0
+
+  function getFetch(url) {
+    ++fetchCount
+
+    fetch(url).then(res => {
+      
+    })
+    if (fetchCount < max) {
+      getFetch(urls[fetchCount])
+    }
+  }
+
+  getFetch(urls[fetchCount])
+}
+
+
+
+function serial(urls, max, callback) {
+  let result = []
+  let index = 0
+  
+  function getFetch(url) {
+    fetch(url).then(res => {
+      ++index
+      if (result.length === urls.length) {
+        callback()
+        return
+      }
+      result.push(res)
+      getFetch(urls[index])
+    })
+  }
+
+  getFetch(urls[index])
+}
+
+const urls = [1,2,3,4,5,6,7,8,9,10]
+const max = 4
+const callback = () => {console.log('giao')}
+
+limitFetch(urls, max, callback)
+
+</script>
+</body>
+</html>

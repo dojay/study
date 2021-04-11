@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+// 伪代码
+function patch(oldVnode, vnode) {
+  if (oldVnode === vnode) return
+
+  const elm = oldVnode.elm = vnode.elm
+  const oldCh = oldVnode.children
+  const ch = vnode.children
+
+  if (isUndef(vnode.text)) {
+    if (isDef(oldCh) && isDef(ch)) {
+      updateChildren(oldCh, ch)
+    } else if (idDef(oldCh)) {
+      removeVNodes(oldCh)
+    } else if (isDef(ch)) {
+      addVNodes(elm, ch)
+    } else if (idDef(oldVnode.text)) {
+      setTextContent(elm, '')
+    }
+  } else if(oldVnode.text !== vnode.text) {
+    setTextContent(elm, vnode.text)
+  }
+}
+// - 首先判断oldVnode和vnode是否一致，如果一致，则直接return
+// - 判断是否是普通文本节点
+//   - 如果是，判断oldVnode节点和vnode节点的文本是否一致
+//     - 如果不一致，则在真实dom中，插入vnode的文本节点
+//   - 如果不是普通文本节点
+//     - oldvnode有child，vnode中没有child，在真实dom中，把oldvnode的child删除
+//     - oldvnode没有child，vnode有child，在真实dom中，添加child
+//     - oldvnode和vnode都有child，则执行updatechildren
+
+function updateChildren(parentElm, oldCh, ch) {
+  let oldStartIdx = 0
+  let oldEndIdx = oldCh.length - 1
+  let oldStartVnode = oldCh[0]
+  let oldEndVnode = oldCh[oldEndIdx]
+
+  let newStartIdx = 0
+  let newStartIdx = ch.length - 1
+  let newStartVnode = ch[0]
+  let newEndVnode = ch[oldEndIdx]
+
+  if (isUndef(oldStartVnode)) {
+    oldStartVnode = oldStartVnode[++oldStartIdx]
+  } else if (isUndef(oldEndVnode)) {
+    oldEndVnode = oldEndVnode[--oldEndIdx]
+  } else if (sameVnode(oldStartVnode, newStartVnode)) {
+    path(oldStartVnode, newStartVnode)
+    oldStartVnode = oldStartVnode[++oldStartIdx]
+    newStartVnode = newStartVnode[++newStartIdx]
+  }
+
+}
+</script>
+</body>
+</html>

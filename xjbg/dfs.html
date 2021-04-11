@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+// 深度优先遍历
+
+// 递归
+// function dfs(node, nodeList = []) {
+//   if (node) {
+//     nodeList.push(node)
+
+//     let children = node.children
+
+//     for (let i=0;i<children.length;i++) {
+//       dfs(children[i], nodeList)
+//     }
+//   }
+  
+//   return nodeList
+// }
+
+// // 利用栈
+
+// function dfs(node) {
+//   const stack = []
+//   const nodeList = []
+
+//   if (node) {
+//     stack.push(node)
+
+//     while(stack.length) {
+//       let item = stack.pop()
+//       nodeList.push(item)
+
+//       let children = item.children
+
+//       for (let i=children.length - 1;i>=0;i--) {
+//         stack.push(children[i])
+//       }
+//     }
+//   }
+
+//   return nodeList
+// }
+
+
+// // 广度优先遍历
+
+// function bfs(node) {
+//   const queue = []
+//   const nodeList = []
+
+//   if (node) {
+//     queue.push(node)
+
+//     while(queue.length) {
+//       let item = queue.shift()
+//       nodeList.push(item)
+
+//       let children = item.children
+
+//       for(let i=0;i<children.length;i++) {
+//         stack.push(children[i])
+//       }
+//     }
+//   }
+// }
+
+
+/****************************************************************/
+
+function Tree(val, left = null, right = null) {
+  this.val = val
+  this.left = left
+  this.right = right
+}
+
+/**
+ *     4
+ *   2   7
+ * 1  3 6  9
+*/
+
+let tree = new Tree(4,
+  new Tree(2,
+    new Tree(1),
+    new Tree(3)
+  ),
+  new Tree(7,
+    new Tree(6),
+    new Tree(9)
+  )
+)
+
+// DFS 利用栈
+function dfs(root) {
+  let res = []
+  let stack = [root]
+
+  while(stack.length) {
+    let len = stack.length
+    for(let i=0;i<len;i++) {
+      let node = stack.pop()
+      res.push(node.val)
+      if (node.right) stack.push(node.right)
+      if (node.left) stack.push(node.left)
+    }
+  }
+
+  return res
+}
+
+console.log(dfs(tree)) // 结果应该是： 4、2、1、3、7、6、9
+
+
+// BFS 利用队列
+function bfs(root) {
+  let res = []
+  let queue = [root]
+
+  while(queue.length) {
+    let len = queue.length
+    for (let i=0;i<len;i++) {
+      let node = queue.shift()
+      res.push(node.val)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
+    }
+  }
+
+  return res
+}
+
+console.log(bfs(tree)) // 结果应该是: 4、2、7、1、3、6、9
+
+</script>
+</body>
+</html>

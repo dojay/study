@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+function _new1(fn) {
+  const obj = {}
+  obj.__proto__ = fn.prototype // 为了访问fn中的原型属性和方法，例如fn.prototype.sayName = function() {}
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+function _new2(fn) {
+  const obj = Object.setPrototypeOf({}, fn.prototype)
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+function _new3(fn) {
+  const obj = Object.create(fn.prototype)
+  const result = fn.call(obj)
+  return result instanceof Object ? result : obj
+}
+
+
+/************************************************************/
+
+function _mynew(fn, ...args) {
+  let obj = Object.create(fn.prototype)
+  let obj = Object.setPrototypeOf({}, fn.prototype)
+}
+
+
+
+/***************************测试数据********************************/
+function Foo(name) {
+  this.name = name
+  return {
+    name: '顺'
+  }
+}
+
+const f1 = new Foo('老王')
+const f2 = _mynew(Foo, '老张')
+console.log(f1, f2)
+
+
+</script>
+</body>
+</html>

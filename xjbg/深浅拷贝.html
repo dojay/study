@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+  // function shallowCopy(obj) {
+  //   if (!obj || typeof obj !== 'object') return
+
+  //   const newObj = obj instanceof Array ? [] : {}
+
+  //   for (let key in obj) {
+  //     newObj[key] = obj[key]
+  //   }
+  //   return newObj
+  // }
+
+  // const arr = [1,2,3,4]
+  // const obj = {
+  //   a: 1,
+  //   b: 2
+  // }
+  // const newArr = shallowCopy(arr)
+  // arr[0] = 5
+  // console.log(arr)
+  // console.log(newArr);
+  
+  // const newObj = shallowCopy(obj)
+  // obj.a = 11
+  // console.log(obj);
+  // console.log(newObj);
+  
+
+  // const arr = [1, [2,3], [4]]
+  // const newArr = deepCopy(arr)
+
+  // arr[1][0] = 5
+  // console.log(arr);
+  // console.log(newArr);
+
+
+
+  // ============================再来一遍========================================================
+
+  function deepClone(source, hash=new WeakMap) {
+    if (!(source !== null && typeof source === 'object')) return source
+    if (hash.has(source)) return hash.get(source)
+
+    const result = Array.isArray(source) ? [] : {}
+    hash.set(source, result)
+
+    // 处理symbol
+    const symbols = Object.getOwnPropertySymbols(source)
+    if (symbols.length) {
+      symbols.forEach(syms => {
+        if (syms !== null && typeof syms === 'object') {
+          result[syms] = deepClone(source[syms], hash)
+        } else {
+          result[syms] = source[syms]
+        }
+      })
+    }
+
+
+    for (let key in source) {
+      result[key] = typeof source[key] === 'object' ? deepClone(source[key], hash) : source[key]
+    }
+
+    return result
+  }
+  
+  const source = {
+    name: '老王',
+    other: {
+      age: 18
+    },
+    a1: undefined,
+    a2: null
+  }
+
+  const obj = deepClone(source)
+
+
+  obj.other.age = 19
+
+  console.log(obj, source);
+  
+  
+</script>
+</body>
+</html>

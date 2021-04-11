@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>giao</title>
+</head>
+<body>
+
+  <div id="app">
+    <div>{{other.age}}{{other.sex}}</div>
+  </div>
+
+</body>
+<script>
+
+  function MVVM(options = {}) {
+    this.$options = options
+    let data = this._data = this.$options.data
+    let el = this.$options.el
+
+    // this 代理 this._data
+    for (let key in data) {
+      Object.defineProperty(this, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          return this._data[key]
+        },
+        set(newVal) {
+          this._data[key] = newVal
+        }
+      })
+    }
+  
+    observer(data)
+    // 初始化computed，将this指向实例
+    // initComputed.call(this)
+    new Compile(el, this)
+  }
+  
+  function observer(data) {
+    if (!data || typeof data !== 'object') {
+      return
+    }
+  
+    new Observer(data)
+  }
+  
+  function Observer(data) {
+    let dep = new Dep()
+    for (let key in data) {
+      let val = data[key]
+      observer(val)
+      Object.defineProperty(data, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          Dep.target && dep.addSub(Dep.target) // 将watcher添加到订阅事件中去
+          return val
+        },
+        set(newVal) {
+          if (val === newVal) return
+          val = newVal
+          observer(val)
+          // 这里触发通知
+          dep.notify() // 让所有watcher的update方法执行
+        }
+      })
+    }
+  }
+  
+  // 创建compile构造函数
+  function Compile(el, vm) {
+    // 将el挂载到vm上，方便调用
+    vm.$el = document.querySelector(el)
+    let fragment = document.createDocumentFragment()
+
+    while(child = vm.$el.firstChild) {
+      fragment.appendChild(child) // 此时将el中的内容放入内存中
+    }
+
+    // 对el里面的内容进行替换
+    function replace(frag) {
+      Array.from(frag.childNodes).forEach(node => {
+        let txt = node.textContent
+        let reg = /\{\{(.*?)\}\}/g // 匹配{{}}
+
+        if (node.nodeType === 3 && reg.test(txt)) { // 既是文本节点，又是大括号
+          function replaceTxt() {
+            node.textContent = txt.replace(reg, (match, placeholder, p) => {
+              new Watcher(vm, placeholder, replaceTxt);   // 监听变化，进行匹配替换内容
+                return placeholder.split('.').reduce((val, key) => {
+                  return val[key]; 
+                }, vm);
+            })
+          }
+
+          replaceTxt()
+        } else if (node.nodeType === 1) { // 元素节点
+          let nodeAttr = node.attributes // 获取dom上所有的属性，是一个类数组
+          
+          Array.from(nodeAttr).forEach(attr => {
+            let name = attr.name
+            let exp = attr.value
+
+            if (name.includes('v-')) {
+              node.value = vm[exp]
+            }
+
+            // 监听变化
+            new Watcher(vm, exp, newVal => {
+              node.value = newVal
+            })
+          })
+        }
+        if (node.childNodes && node.childNodes.length) {
+          replace(node)
+        }
+      })
+    }
+
+    replace(fragment)
+
+    vm.$el.appendChild(fragment)
+  }
+  
+  
+  function Dep () {
+    this.subs = []
+  }
+  
+  Dep.prototype = {
+    addSub(handler) {
+      this.subs.push(handler)
+    },
+    notify() {
+      this.subs.forEach(sub => sub.update())
+    }
+  }
+  
+  
+  function Watcher(vm, exp, fn) {
+    this.fn = fn
+    this.vm = vm
+    this.exp = exp
+
+    Dep.target = this
+
+    let arr = exp.split('.')
+    let val = vm
+    arr.forEach(key => {
+      val = val[key]
+    })
+
+    Dep.target = null
+  }
+  
+  Watcher.prototype.update = function() {
+    let arr = this.exp.split('.')
+    let val = this.vm
+
+    arr.forEach(key => {
+      val = val[key]
+    })
+    this.fn(val)
+  }
+  
+
+  function initComputed() {
+    let vm = this
+    let computed = this.$options.computed // 从options上拿到computed属性
+
+    // 得到的都是对象的key，可以通过Object.keys转换成数组
+    Object.keys(computed).forEach(key => { // key就是sum, noop
+      Object.defineProperty(vm, key, {
+        // 这里判断computed里的key是对象还是函数
+        // 如果是函数直接调用get方法
+        // 如果是对象的话，手动调用一下get方法即可
+        get: typeof computed[key] === 'function' ? computed[key] : computed[key].get,
+        set() {}
+      })
+    })
+  }
+  
+// ==========================================================================
+
+
+  const app = new MVVM({
+    el: '#app',
+    data: {
+      name: '老王',
+      other: {
+        age: 18,
+        sex: '男'
+      }
+    }
+  })
+
+  </script>
+</html>

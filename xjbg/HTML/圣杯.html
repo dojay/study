@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+
+    #header {height: 60px;background: #ccc;}
+    #left{width: 100px;height: 500px;background-color: #f00;}
+    #center{height: 500px;background: #cf9;}
+    #right{width: 200px;height: 500px;background: green;}
+
+    #parent{}
+    .left{float: left;margin-left: -100%;}
+    .center{float: left;width: 100%;margin-left: 100px;}
+    .right{float: left;margin-left: -200px;}
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+  <div id="parent">
+    <div class="center" id="center">我是中间</div>
+    <div class="left" id="left">左列定宽</div>
+    <div class="right" id="right">右列定宽</div>
+  </div>
+</body>
+</html>

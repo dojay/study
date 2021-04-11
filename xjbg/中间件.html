@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+class Express {
+  constructor() {
+    this.chain = []
+    this.index = 0
+    this.req = ''
+    this.res = ''
+  }
+
+  use(handle) {
+    this.chain.push(handle)
+  }
+
+  next() {
+    if (this.index >= this.chain.length) return
+
+    const middleware = this.chain[this.index++]
+    middleware(this.req, this.res, this.next.bind(this))
+  }
+}
+
+
+function log(req, res, next) {
+  console.log('我是一个日志中间件')
+  next()
+}
+
+function log(req, res, next) {
+  console.log('我是一个日志中间件')
+  next()
+}
+
+const app = new Express()
+app.use(log)
+app.use(log)
+
+app.next()
+
+app.use(log)
+app.next()
+
+
+
+
+</script>
+</body>
+</html>

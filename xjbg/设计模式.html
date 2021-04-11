@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计模式</title>
+</head>
+<body>
+<script>
+
+// const Single = (function () {
+//   let instance = null
+
+//   if (!instance) {
+//     instance = new xx()
+//   }
+
+//   return instance
+// })()
+
+const myImage = (function() {
+  const imgNode = document.createElement('img')
+  document.body.appendChild(imgNode)
+
+  return {
+    setSrc: function(src) {
+      imgNode.src = src
+    }
+  }
+})()
+
+const proxyImage = (function() {
+  const img = new Image()
+
+  img.onload = function() {
+    myImage.setSrc = this.src
+  }
+
+  return {
+    setSrc: function(src) {
+      myImage.setSrc('laoding.gif')
+      img.src = src
+    }
+  }
+})()
+
+</script>
+</body>
+</html>

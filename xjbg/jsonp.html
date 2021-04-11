@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+// function JSONP(options) {
+//   return new Promise((resolve, reject) => {
+//     let _url = options.url
+
+//     const params = []
+//     for (let i in options.data) {
+//       params.push(`${i}=${options.data[i]}`)
+//     }
+
+//     _url = `${_url}?${params.join('&')}`
+
+//     const script = document.createElement('script')
+//     script.src = _url
+//     document.body.appendChild(script)
+
+//     window[options.callback] = (data) => {
+//       resolve(data)
+//     }
+//   })
+// }
+
+
+function JSONP(options) {
+  return new Promise((resolve, reject) => {
+    let script = document.createElement('script')
+    let data = []
+
+    for (let key in options.data) {
+      data.push(`${key}=${options.data[key]}`)
+    }
+    script.src = options.url + '?' + data.join('&')
+
+    document.body.appendChild(script)
+
+    window[options.callback] = (data) => {
+      resolve(data)
+    }
+  })
+}
+
+
+JSONP({
+  url: 'http://localhost:8080',
+  data: {
+    name: 'old wang'
+  },
+  callback: 'showName'
+}).then(res => {
+  console.log(res)
+})
+
+</script>
+</body>
+</html>

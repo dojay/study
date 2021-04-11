@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  const fuckTimes = function(fn) {
+    let times = 3
+    return function(...args) {
+      if (times === 0) {
+        console.log('不能再执行了');
+      } else {
+        --times
+        return fn.apply(this, args)
+      }
+    }
+  }
+
+  function sayHello(name) {
+    return name
+  }
+
+  const f = fuckTimes(sayHello)
+
+  console.log(f('老王'));
+  console.log(f('老王'));
+  console.log(f('老王'));
+  console.log(f('老王'));
+  
+
+
+  // console.log(foo());
+  // console.log(foo());
+
+
+  // let foo1 = function() {
+  //   let t = +new Date()
+
+  //   foo1 = function() {
+  //     return t
+  //   }
+
+  //   return foo1()
+  // }
+
+  // // console.log(foo1());
+  
+  
+  // // 函数记忆
+
+  // function memery(fn) {
+  //   const cache = {}
+
+  //   return function(...args) {
+  //     const key = args.join(',')
+
+  //     if (cache[key]) {
+  //       return cache[key]
+  //     } else {
+  //       return cache[key] = fn.apply(this, args)
+  //     }
+  //   }
+  // }
+
+  // function add(a, b) {
+  //   return a + b
+  // }
+
+  // const m = memery(add)
+  // console.log(m(1,2));
+  
+
+</script>
+</body>
+</html>

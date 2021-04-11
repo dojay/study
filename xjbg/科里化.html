@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+  // function curry(fn, ...args) {
+  //   const length = fn.length
+
+  //   return function(...innerArgs) {
+  //     const _args = args.concat(...innerArgs)
+
+  //     if (_args.length < length) {
+  //       return curry.call(this, fn, ..._args)
+  //     } else {
+  //       return fn.apply(this, _args)
+  //     }
+  //   }
+  // }
+
+  // var fn = function(a, b, c) {
+  //   console.log([a, b, c]);
+  // }
+
+  // const a = curry(fn, 1)
+  // const b = a(2)
+  // const c = b(3)
+  // console.log(c)
+
+
+  // ============================再实现一遍======================================
+
+
+  // function curry_1(fn, ...args) {
+  //   const length = fn.length // 函数的参数长度
+  //   let _args = args
+  //   return function(...innerArgs) {
+  //     _args = _args.concat(innerArgs)
+  //     if (_args.length < length) {
+  //       return curry_1(fn, ..._args)
+  //     } else {
+  //       return fn(..._args)
+  //     }
+  //   }
+  // }
+
+  // var fn = function(a, b, c) {
+  //   console.log([a, b, c]);
+  //   return 1
+  // }
+
+  // const a = curry_1(fn, 1)
+  // const b = a(2)
+  // const c = b(3)
+
+
+  // ============================再实现一遍======================================
+  
+  function curring(fn, ...args) {
+    const length = fn.length // 函数的参数长度，这个是重点
+    return function(...innerArgs) {
+      let _args = args.concat(innerArgs)
+      if (_args.length < length) {
+        return curring(fn, ..._args)
+      } else {
+        return fn(..._args)
+      }
+    }
+  }
+
+  const fn = function(a, b, c) {
+    console.log(a, b, c)
+    return a+b+c
+  }
+
+  const c = curring(fn)
+
+ console.log(c(1)(2)(3));
+ 
+
+  
+  
+  
+
+
+</script>
+</body>
+</html>

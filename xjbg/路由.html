@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn1">改变hash1</button>
+  <button id="btn2">改变hash2</button>
+</body>
+<script>
+  class Router {
+    constructor(options = {}) {
+      this.mode = options.mode || 'hash'
+      this.routes = options.routes
+      this.history = this.mode === 'history' ? new HTML5History(this) : new HashHistory(this)
+
+      this.init()
+    }
+
+    init() {
+      const history = this.history
+    }
+
+    push(location) {
+      this.history.push(location)
+    }
+
+    replace(location) {
+      this.history.replace(location)
+    }
+
+    go(n) {
+      this.history.go(n)
+    }
+  }
+
+  class HashHistory {
+    constructor() {
+      window.addEventListener('hashchange', () => {
+        this.changePage()
+      })
+    }
+
+    push() {
+      
+    }
+  }
+
+  class HTML5History {
+    constructor() {
+      window.addEventListener('popstate', () => {
+        this.changePage()
+      })
+    }
+
+    push() {
+      this.changeUrl()
+    }
+    replace() {
+      this.changeUrl()
+    }
+    go(n) {
+      window.history.go(n)
+    }
+    changeUrl() {
+      if (replace) {
+        window.history.replaceState({}, '', url)
+      } else {
+        window.history.pushState({}, '', url)
+      }
+    }
+  }
+
+
+</script>
+</html>

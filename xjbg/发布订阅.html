@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+class Publisher {
+  constructor() {
+    this.subs = {}
+  }
+
+  on(name, handler) {
+    if (!this.subs[name]) {
+      this.subs[name] = []
+    }
+    this.subs[name].push(handler)
+  }
+
+  emit(name) {
+    if (this.subs[name]) {
+      this.subs[name].forEach(item => {
+        item()
+      })
+    }
+  }
+}
+
+const p = new Publisher()
+p.on('aaa', () => console.log(111))
+p.on('aaa', () => console.log(222))
+p.on('aaa', () => console.log(333))
+p.on('bbb', () => console.log(444))
+
+p.emit('aaa')
+// p.emit('bbb')
+
+</script>
+</body>
+</html>

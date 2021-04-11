@@ -1,0 +1,6 @@
+## 什么是loader
+
+loader就是一个node模块，在webpack的定义中，loader导出一个函数，loader会在转换源模块的时候调用该函数。
+在这个函数内容部，我们可以通过传入this上下文给Loader API来使用它们。
+
+loader函数接受的唯一参数是一个包含源文件内容的字符串

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  var isSubsequence = function(s, t) {
+    if (s.length === 0) {
+        return true
+    }
+    let str = ''
+    for (let i=0;i<s.length;i++) {
+        if(t.indexOf(s[i]) > -1) {
+            t = t.substr(i+1)
+            str += s[i]
+        }
+    }
+
+    if (str.length === s.length) {
+        return true
+    }
+
+    return false
+};
+
+isSubsequence("bb","ahbgdc");
+</script>
+</body>
+</html>

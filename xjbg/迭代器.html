@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script>
+
+function createIterator(items) {
+  let index = 0
+
+  return {
+    next() {
+      const done = index >= items.length
+      const value = done ? undefined : items[index++]
+      return {
+        done,
+        value
+      }
+    }
+  }
+}
+
+var iterator = createIterator([1,2,3])
+
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+
+const arr = [11,22,33,43]
+
+for (let i in arr) {
+  console.log(i)
+}
+
+
+</script>
+</body>
+</html>

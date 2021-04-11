@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #box{
+      width: 300px;
+      height: 200px;
+      background: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="box"></div>
+<script>
+
+// function debounce(fn, delay) {
+//   let timer = null
+
+//   return function() {
+//     const args = arguments
+//     if (timer) {
+//       clearTimeout(timer)
+//     }
+//     timer = setTimeout(() => {
+//       fn.apply(this, args)
+//     }, delay)
+//   }
+// }
+
+// function throttle(fn, delay) {
+//   let start = 0
+
+//   return function() {
+//     const now = +new Date()
+//     const args = arguments
+//     if (now - start > delay) {
+//       start = now
+
+//       fn.apply(this, args)
+//     }
+//   }
+// }
+
+// function throttle2(fn, delay) {
+//   let timer = null
+
+//   return function() {
+//     if (!timer) {
+//       timer = setTimeout(() => {
+//         timer = null
+//         fn.apply(this)
+//       }, delay)
+//     }
+//   }
+// }
+
+
+/***********************************************************************/
+
+// 防抖 在没有到时间之前， 如果持续触发函数，就要清除定时器，重新开始
+// 你的代码
+
+// 节流 不管触发多少次，在规定的时间内，函数只执行一次
+// function throttle(fn, delay) {
+//   let timer = null
+//   return function() {
+//     if (!timer) {
+//       timer = setTimeout(() => {
+//         fn()
+//         timer = null
+//       }, delay)
+//     }
+//   }
+// }
+
+function throttle(fn, delay) {
+  let start = +new Date()
+
+  return function() {
+    let now = +new Date()
+
+    if (now - start >= delay) {
+      start = now
+      fn()
+    }
+  }
+}
+
+/***********************************************************************/
+
+var count = 1;
+var box = document.getElementById('box');
+
+function getUserAction() {
+  box.innerHTML = count++;
+};
+
+// box.onmousemove = debounce(getUserAction, 1000)
+box.onmousemove = throttle(getUserAction, 1000)
+
+</script>
+</body>
+</html>
