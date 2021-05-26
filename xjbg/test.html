@@ -39,9 +39,9 @@ var obj = {
 // console.log(obj.c);
 // console.log(obj.fn());
 
-const foo = {
-  name: '老王'
-}
+// const foo = {
+//   name: '老王'
+// }
 
 function say(age) {
   console.log(this.name, age)
@@ -1037,7 +1037,71 @@ function transfer(str) {
   console.log(s, str)
 }
 
-transfer('get-element-by-id')
+// transfer('get-element-by-id')
+
+function foo(a) {
+  console.log( a + b );
+}
+// foo(2);
+
+var b=2; 
+
+function foo(a) { 
+  console.log( a + b ); 
+  b=a;
+}
+// foo( 2 );
+
+
+// foo();
+
+var a = true; 
+
+if (a) {
+  function foo() { console.log("a"); } 
+} else {
+  function foo() { console.log("b"); }
+}
+
+function foo() { 
+  var a=2;
+  this.bar();
+}
+function bar() {
+  console.log( this.a );
+}
+// foo();
+
+
+function longestPalindrome(s) {
+  let max = 0
+  let res = ''
+
+  for (let l=0;l<s.length;l++) {
+    for (let r=i+1;r<s.length;r++) {
+      let item = s.substring(l, r)
+      if (isPalindrome(item) && item.length > max) {
+        res = res.substring(l, r)
+        max = res.length
+      }
+    }
+  }
+
+  function isPalindrome(s) {
+    let len = s.length
+    let middle = Math.floor(len / 2)
+    for (let i=0;i<middle;i++) {
+      if (s[i] !== s[len - i - 1]) {
+        return false
+      }
+    }
+  }
+
+  return res
+}
+
+console.log(longestPalindrome('babad'))
+
 
 
 </script>

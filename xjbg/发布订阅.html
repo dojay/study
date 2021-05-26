@@ -8,35 +8,54 @@
 <body>
 <script>
 
-class Publisher {
-  constructor() {
-    this.subs = {}
-  }
+function Publisher() {
+  this.subs = {}
+}
 
-  on(name, handler) {
-    if (!this.subs[name]) {
-      this.subs[name] = []
-    }
-    this.subs[name].push(handler)
-  }
-
-  emit(name) {
-    if (this.subs[name]) {
-      this.subs[name].forEach(item => {
-        item()
-      })
-    }
+Publisher.prototype.on = function(name, fn) {
+  if (this.subs[name]) {
+    this.subs[name].push(fn)
+  } else {
+    this.subs[name] = [fn]
   }
 }
 
-const p = new Publisher()
-p.on('aaa', () => console.log(111))
-p.on('aaa', () => console.log(222))
-p.on('aaa', () => console.log(333))
-p.on('bbb', () => console.log(444))
+Publisher.prototype.emit = function(name, data) {
+  if (this.subs[name]) {
+    this.subs[name].forEach(fn => {
+      fn(data)
+    })
+  }
+}
 
-p.emit('aaa')
-// p.emit('bbb')
+Publisher.prototype.once = function(name, fn) {
+  this.on(name, (data) => {
+    fn(data)
+    this.off(name)
+  })
+}
+
+Publisher.prototype.off = function(name) {
+  if (this.subs[name]) {
+    delete this.subs[name]
+  }
+}
+
+
+let p = new Publisher();
+
+p.on('aaa', data => console.log('老王说: ', data))
+p.on('bbb', data => console.log('老张：', data))
+
+p.once('ccc', data => console.log('顺子： ', data))
+
+console.log(p)
+
+p.emit('aaa', '爸爸')
+p.emit('aaa', '爸爸')
+// p.emit('bbb', '爸爸')
+// p.emit('ccc', '哈哈')
+// p.emit('ccc', '哈哈')
 
 </script>
 </body>

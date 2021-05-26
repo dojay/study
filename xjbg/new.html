@@ -28,26 +28,15 @@ function _new3(fn) {
 }
 
 
-/************************************************************/
-
-function _mynew(fn, ...args) {
-  let obj = Object.create(fn.prototype)
-  let obj = Object.setPrototypeOf({}, fn.prototype)
-}
-
-
-
 /***************************测试数据********************************/
 function Foo(name) {
   this.name = name
-  return {
-    name: '顺'
-  }
 }
 
-const f1 = new Foo('老王')
-const f2 = _mynew(Foo, '老张')
-console.log(f1, f2)
+// const f1 = new Foo('老王')
+const f2 = _new(Foo, '老张')
+// console.log(f1.name)
+console.log(f2.name)
 
 
 </script>
