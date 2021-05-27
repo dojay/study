@@ -8,11 +8,11 @@
 <body>
 <script>
 
-function EventBus() {
+function Publisher() {
   this.subs = {}
 }
 
-EventBus.prototype.on = function(name, fn) {
+Publisher.prototype.on = function(name, fn) {
   if (this.subs[name]) {
     this.subs[name].push(fn)
   } else {
@@ -20,8 +20,7 @@ EventBus.prototype.on = function(name, fn) {
   }
 }
 
-
-EventBus.prototype.emit = function(name, data) {
+Publisher.prototype.emit = function(name, data) {
   if (this.subs[name]) {
     this.subs[name].forEach(fn => {
       fn(data)
@@ -29,33 +28,34 @@ EventBus.prototype.emit = function(name, data) {
   }
 }
 
+Publisher.prototype.once = function(name, fn) {
+  this.on(name, (data) => {
+    fn(data)
+    this.off(name)
+  })
+}
 
-EventBus.prototype.off = function(name) {
+Publisher.prototype.off = function(name) {
   if (this.subs[name]) {
     delete this.subs[name]
   }
 }
 
 
-EventBus.prototype.once = function(name, fn) {
-  this.on(name, (res) => {
-    console.log(res)
-    fn(res)
-    this.off(name)
-  })
-}
+let p = new Publisher();
 
+p.on('aaa', data => console.log('老王说: ', data))
+p.on('bbb', data => console.log('老张：', data))
 
-/**
- * 测试用例
-*/
+p.once('ccc', data => console.log('顺子： ', data))
 
-let e = new EventBus()
+console.log(p)
 
-e.once('say', res => console.log('hi，', res))
-
-e.emit('say', '老王')
-e.emit('say', '老张')
+p.emit('aaa', '爸爸')
+p.emit('aaa', '爸爸')
+// p.emit('bbb', '爸爸')
+// p.emit('ccc', '哈哈')
+// p.emit('ccc', '哈哈')
 
 </script>
 </body>
