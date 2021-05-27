@@ -29,16 +29,21 @@
 //   })
 // }
 
+/**
+  再次实现
+*/
 
 function JSONP(options) {
   return new Promise((resolve, reject) => {
     let script = document.createElement('script')
-    let data = []
+    let params = []
+    
 
-    for (let key in options.data) {
-      data.push(`${key}=${options.data[key]}`)
+    for (let item in options.data) {
+      params.push(`${item}=${options.data[item]}`)
     }
-    script.src = options.url + '?' + data.join('&')
+
+    script.src = options.url + `?${params.join('&')}`
 
     document.body.appendChild(script)
 
@@ -49,10 +54,15 @@ function JSONP(options) {
 }
 
 
+/**
+  测试用例
+*/
+
 JSONP({
   url: 'http://localhost:8080',
   data: {
-    name: 'old wang'
+    name: 'old wang',
+    age: 18
   },
   callback: 'showName'
 }).then(res => {

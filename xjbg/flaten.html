@@ -18,9 +18,15 @@
 
 
 
-  Array.prototype._flat = function(number) {
-    return this.reduce((res, cur) => {
-      return number > 0 ? res.concat(Array.isArray(cur)? cur._flat(number - 1) : cur) : this.slice()
+  // Array.prototype._flat = function(number) {
+  //   return this.reduce((res, cur) => {
+  //     return number > 0 ? res.concat(Array.isArray(cur)? cur._flat(number - 1) : cur) : this.slice()
+  //   }, [])
+  // }
+
+  Array.prototype._flat = function(num) {
+    return this.reduce((result, cur) => {
+      return result.concat(Array.isArray(cur) ? cur._flat(): cur)
     }, [])
   }
 

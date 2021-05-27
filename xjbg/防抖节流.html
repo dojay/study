@@ -63,25 +63,12 @@
 // }
 
 
-/***********************************************************************/
+/**
+ * 再来一遍
+*/
 
-// 防抖 在没有到时间之前， 如果持续触发函数，就要清除定时器，重新开始
-// 你的代码
-
-// 节流 不管触发多少次，在规定的时间内，函数只执行一次
-// function throttle(fn, delay) {
-//   let timer = null
-//   return function() {
-//     if (!timer) {
-//       timer = setTimeout(() => {
-//         fn()
-//         timer = null
-//       }, delay)
-//     }
-//   }
-// }
-
-function throttle(fn, delay) {
+function throttle2(fn, delay) {
+  let timer = null
   let start = +new Date()
 
   return function() {
@@ -94,7 +81,6 @@ function throttle(fn, delay) {
   }
 }
 
-/***********************************************************************/
 
 var count = 1;
 var box = document.getElementById('box');
@@ -104,7 +90,7 @@ function getUserAction() {
 };
 
 // box.onmousemove = debounce(getUserAction, 1000)
-box.onmousemove = throttle(getUserAction, 1000)
+box.onmousemove = throttle2(getUserAction, 1000)
 
 </script>
 </body>

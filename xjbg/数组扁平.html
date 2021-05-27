@@ -7,28 +7,6 @@
 </head>
 <body>
 <script>
-  // function flat(arr, newArr = []) {
-  //   if (!Array.isArray(arr) || arr.length === 0) {
-  //     return
-  //   }
-  //   for (let key in arr) {
-  //     if (Array.isArray(arr[key])) {
-  //       flat(arr[key], newArr)
-  //     } else {
-  //       newArr.push(arr[key])
-  //     }
-  //   }
-
-  //   return newArr
-  // }
-
-  // const arr = [1,2,['3',4], [5, [6]]]
-
-  // function flat1(arr) {
-  //   return arr.reduce((prev, cur) => {
-  //     return prev.concat(Array.isArray(cur) ? flat1(cur) : cur)
-  //   }, [])
-  // }
   
   function flat(arr, newArr =[]) {
     if (!Array.isArray(arr)) return arr
@@ -51,8 +29,28 @@
     }, [])
   }
 
+
+
+  Array.prototype._flat = function() {
+    let res = []
+
+    for (let i=0;i<this.length;i++) {
+      if (Array.isArray(this[i])) {
+        this[i]._flat()
+      } else {
+        res.push(this[i])
+      }
+    }
+
+    console.log(res)
+  }
+
+
+
+
   const arr = [1,2,['3',4], [5, [6]]]
-  console.log(reduceFlat(arr))
+ console.log( arr._flat())
+  // console.log(reduceFlat(arr))
 
 </script>
 </body>

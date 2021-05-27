@@ -22,16 +22,6 @@ function fetch(url) {
   })
 }
 
-function fetch(url) {
-  return new Promise((resolve, reject) => {
-    const random = Math.random() * 4000
-
-    setTimeout(() => {
-      resolve(url)
-    }, random);
-  })
-}
-
 function limitFetch(urls, max, callback) {
   let result = []
   let fetchCount = 0
@@ -49,24 +39,6 @@ function limitFetch(urls, max, callback) {
       }
     })
 
-    if (fetchCount < max) {
-      getFetch(urls[fetchCount])
-    }
-  }
-
-  getFetch(urls[fetchCount])
-}
-
-function limitFetch(urls, max, callback) {
-  let result = []
-  let fetchCount = 0
-
-  function getFetch(url) {
-    ++fetchCount
-
-    fetch(url).then(res => {
-      
-    })
     if (fetchCount < max) {
       getFetch(urls[fetchCount])
     }
@@ -95,6 +67,65 @@ function serial(urls, max, callback) {
 
   getFetch(urls[index])
 }
+
+
+
+/**
+ * 第二遍
+*/
+
+// 并发请求
+
+function limitFetch(urls, max, cb) {
+  let result = []
+  let count = 0
+
+  function fetchUrl(url) {
+    ++count
+
+    fetch.then(res => {
+      result.push(res)
+
+      if (count < urls.length) {
+        fetchUrl(urls[count])
+      } else if (result.length == urls.length) {
+        cb(result)
+      }
+    })
+
+    if (count < max) {
+      fetchUrl(urls[count])
+    }
+  }
+
+  fetchUrl(urls[count])
+}
+
+
+function serial(urls, max, cb) {
+  let count = 0
+  let result = []
+
+  function fetchUrl(url) {
+    fetch(url).then(res => {
+      count++
+
+      if (result.length == urls.length) {
+        cb()
+        return
+      }
+
+      result.push(res)
+
+      fetchUrl(urls[count])
+    })
+  }
+}
+
+
+/**
+ * 测试用例
+*/
 
 const urls = [1,2,3,4,5,6,7,8,9,10]
 const max = 4

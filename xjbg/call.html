@@ -59,96 +59,29 @@
 
   
 
-  // function Foo(name) {
-  //   console.log(this.__proto__.constructor)
-  //   this.name = name
-  // }
-
-  // // new Foo('老王')
-
-
-  // function _new(fn) {
-  //   let obj = {}
-  //   const args = [].slice.call(arguments, 1)
-  //   obj.__proto__ = fn.prototype
-  //   fn.apply(obj, args)
-  //   return obj
-  // }
-
-  // const f = _new(Foo, '老王')
-  // console.log(f.name)
-
 //================================================再来一次==============================================================
 
+Function.prototype._call = function(ctx, ...args) {
+  ctx.fn = this || window
 
-// Function.prototype.call_2 = function(ctx, ...args) {
-//   ctx = ctx || window
-//   ctx.fn = this
+  let result = ctx.fn(...args)
 
-//   const result = ctx.fn(...args)
-
-//   delete ctx.fn
-
-//   return result
-// }
-
-// Function.prototype.bind_2 = function(ctx, ...args) {
-//   const self = this
-
-//   const innerBind = function(...innerArgs) {
-//     return self.apply(this instanceof innerBind ? this : ctx, args.concat(innerArgs)) 
-//   }
-
-//   return innerBind
-// }
-
-//================================================再来一次==============================================================
-
-// Function.prototype.bind_4 = function(contex, ...args) {
-//   const self = this
-//   return function(...innerArgs) {
-//     return self.apply(contex, args.concat(innerArgs))
-//   }
-// }
-
-
-// const obj = {
-//   giao: '老王大帅比'
-// }
-
-// function Giao(age, sex) {
-//   console.log(this.giao, age, sex)
-// }
-
-
-// const g = Giao.bind_4(obj)
-// g(18, '男')
-
-
-//================================================再来一次==============================================================
-
-
-const obj = {
-  name: '老王'
-}
-
-function Goo(age) {
-  console.log(this.name, age);
-}
-
-// Goo.call(obj)
-
-Function.prototype.customCall = function(ctx, ...args) {
-  console.log(this, ctx);
-  ctx = ctx || window
-  ctx.fn = this
-  const result = ctx.fn(...args)
+  delete ctx.fn
 
   return result
 }
 
-Goo.customCall(obj, 18)
 
+function foo(age) {
+  console.log(this.name, age)
+  return 111
+}
+
+let obj = {
+  name: '老王'
+}
+
+console.log(foo._call(obj, 18))
 
 
 

@@ -7,23 +7,23 @@
 </head>
 <body>
 <script>
-function regSplitNum(num) {
-  const reg = /\d{1,3}(?=(\d{3})+$)/g // (\d{3})+  代表3的倍数至少一个，?= 一定是三的倍数
-  return (num+'').replace(reg, '$&,')
-}
+// function regSplitNum(num) {
+//   const reg = /\d{1,3}(?=(\d{3})+$)/g // (\d{3})+  代表3的倍数至少一个，?= 一定是三的倍数
+//   return (num+'').replace(reg, '$&,')
+// }
 
-function splitNum(num) {
-  let res = []
-  num = (num + '').split('').reverse()
-  num.forEach((item, index) => {
-    if (index !== 0 && index % 3 == 0 && index !== num.length) {
-      res.push(',', item)
-    } else {
-      res.push(item)
-    }
-  });
-  return res.reverse().join('')
-}
+// function splitNum(num) {
+//   let res = []
+//   num = (num + '').split('').reverse()
+//   num.forEach((item, index) => {
+//     if (index !== 0 && index % 3 == 0 && index !== num.length) {
+//       res.push(',', item)
+//     } else {
+//       res.push(item)
+//     }
+//   });
+//   return res.reverse().join('')
+// }
 
 
 
@@ -46,7 +46,7 @@ function testMath(str) {
   // console.log(r)
 }
 
-console.log(testMath('get-element-by-id'))
+// console.log(testMath('get-element-by-id'))
 
 
 /**
@@ -55,6 +55,27 @@ console.log(testMath('get-element-by-id'))
 
 // const num = '1000000000000'
 // console.log(regSplitNum1(num));
+
+
+
+
+
+
+let num = '123456789'
+
+function regSplitNum(num) {
+  let reg = /\d{1,3}(?=\d{3})+/g
+
+  return num.replace(reg, m => {
+    return m+','
+  })
+
+}
+
+console.log(regSplitNum(num))
+
+
+
 
   
 </script>

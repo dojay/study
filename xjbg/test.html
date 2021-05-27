@@ -1037,7 +1037,103 @@ function transfer(str) {
   console.log(s, str)
 }
 
-transfer('get-element-by-id')
+// transfer('get-element-by-id')
+
+
+function replaceTmp() {
+  let str = '我是{{name}}, 我今年{{age}}'
+  let reg = /\{\{(.*?)}\}/
+
+  str.replace(reg, (a, b) => {
+    console.log(a)
+  })
+}
+
+// replaceTmp()
+
+function ListNode(val) {
+  this.val = val
+  this.next = null
+}
+
+
+let head = new ListNode(1)
+head.next = new ListNode(2)
+head.next.next = new ListNode(3)
+head.next.next.next = new ListNode(4)
+
+// console.log(head)
+
+let prev = head
+
+// console.log(typeof prev)
+
+
+var isStraight = function(nums) {
+    let set = new Set()
+    let min = 14
+    let max = 0
+    while(nums.length) {
+        let item = nums.pop()
+
+        if (set.has(item)) {
+            return false
+        }
+        if (item == 0) {
+            continue
+        }
+
+        set.add(item)
+
+        min = Math.min(min, item)
+        max = Math.max(max, item)
+    }
+
+    console.log(max, min)
+
+    return max - min < 5
+};
+
+
+// isStraight([0,0,1,2,5])
+
+
+function module() {
+  let a = [1,2,3]
+
+  function change() {
+    a.push(4)
+  }
+
+  return {
+    a: a,
+    change: change
+  }
+}
+
+let m1 = module()
+
+m1.change()
+// console.log(m1)
+
+let m2 = module()
+// m2.change()
+// console.log(m2)
+
+
+var isPalindrome = function(x) {
+    x = x.toString()
+    for (let i=0;i<x.length / 2;i++) {
+        if (x[i] !== x[x.length - 1 - i]) {
+            return false
+        }
+    }
+
+    return true
+};
+
+// console.log(isPalindrome(-121))
+
 
 
 </script>

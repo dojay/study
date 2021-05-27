@@ -43,14 +43,13 @@ const arr = [5,1,8,7,4,2,3,6]
 //   return quickSort(left).concat(point, quickSort(right))
 // }
 
+
 function quickSort(arr) {
-  if (arr.length === 0) {
-    return arr
-  } 
+  if (!arr.length) return arr
   let left = []
   let right = []
-  let middle = Math.floor(arr.length / 2)
-  let point = arr.splice(middle, 1)[0]
+  let middle = Math.floor( arr.length / 2)
+  let point = arr.splice(middle, 1)
 
   for (let i=0;i<arr.length;i++) {
     if (arr[i] < point) {
@@ -62,6 +61,8 @@ function quickSort(arr) {
 
   return quickSort(left).concat(point, quickSort(right))
 }
+
+console.log(quickSort(arr))
 
 
 

@@ -15,21 +15,21 @@
   </style>
 </head>
 <body>
-  <ul>
+  <ul id="ul">
     <li>1</li>
     <li>2</li>
     <li>3</li>
     <li>4</li>
-    <li>5</li>
   </ul>
 </body>
 <script>
 
-  const ul = document.querySelector('ul')
 
-  ul.addEventListener('click', function(e) {
-    console.log(e.target.textContent)
-  })
+let ul = document.getElementById('ul')
+
+ul.addEventListener('click', function(e) {
+  console.log(e.target.textContent)
+})
 
 </script>
 </html>

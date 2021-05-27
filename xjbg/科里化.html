@@ -34,43 +34,19 @@
 
   // ============================再实现一遍======================================
 
-
-  // function curry_1(fn, ...args) {
-  //   const length = fn.length // 函数的参数长度
-  //   let _args = args
-  //   return function(...innerArgs) {
-  //     _args = _args.concat(innerArgs)
-  //     if (_args.length < length) {
-  //       return curry_1(fn, ..._args)
-  //     } else {
-  //       return fn(..._args)
-  //     }
-  //   }
-  // }
-
-  // var fn = function(a, b, c) {
-  //   console.log([a, b, c]);
-  //   return 1
-  // }
-
-  // const a = curry_1(fn, 1)
-  // const b = a(2)
-  // const c = b(3)
-
-
-  // ============================再实现一遍======================================
-  
   function curring(fn, ...args) {
-    const length = fn.length // 函数的参数长度，这个是重点
+    let len = fn.length // 函数参数的长度
+    
     return function(...innerArgs) {
       let _args = args.concat(innerArgs)
-      if (_args.length < length) {
+      if (_args.length < len) {
         return curring(fn, ..._args)
       } else {
         return fn(..._args)
       }
     }
   }
+ 
 
   const fn = function(a, b, c) {
     console.log(a, b, c)
